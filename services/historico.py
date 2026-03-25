@@ -1,0 +1,1 @@
+#Salvar e carregar compras do histórico.

@@ -3,11 +3,18 @@
 
 from models.compra import Compra
 from models.item import Item
-from utils.validacoes import validar_produto, validar_quantidade, validar_preco
+from utils.validacoes import (
+    validar_mercado,
+    validar_data,
+    validar_hora,
+    validar_produto,
+    validar_quantidade,
+    validar_preco
+)
 
-mercado = input("Digite o mercado: ").strip()
-data_agora = input("Data da compra: ").strip()
-hora_agora = input("Hora da compra: ").strip()
+mercado = validar_mercado()
+data_agora = validar_data()
+hora_agora = validar_hora()
 
 compra = Compra(mercado, data_agora, hora_agora)
 

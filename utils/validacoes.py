@@ -3,6 +3,8 @@
     #preço inválido
     #quantidade inválida
 
+from datetime import datetime
+
 def validar_produto():
     while True:
         produto = input("Item a adicionar: ").strip()
@@ -47,4 +49,46 @@ def validar_preco():
             print("Inserir um preço válido")
 
 
+def validar_mercado():
+    while True:
+        try:
+            mercado = input("Digite o mercado: ").strip()
+
+            if mercado == "":
+                print("Por favor insira um nome valido")
+                continue
+
+            return mercado.title()
+    
+        except ValueError:
+            print("Insira um nome valido")
+
+def validar_data():
+    while True:
+        data = input("Data da compra (dd/mm/aaaa):").strip()
+
+        if data == "":
+            print("A data não pode estar vazia")
+            continue
+
+        try:
+            datetime.strptime(data, "%d/%m/%Y")
+            return data
+        except ValueError:
+            print("Digite uma data valida no formato dd/mm/aaaa")
+
+
+def validar_hora():
+    while True:
+        hora = input("Insira a hora da compra: ")
+
+        if hora == "":
+            print("A hora não pode estar vazia")
+            continue
+
+        try:
+            datetime.strptime(hora, "%H:%M")
+            return hora
+        except ValueError:
+            print("Digite uma hora valida no formato Hh/Mm")
 

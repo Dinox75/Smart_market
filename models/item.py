@@ -1,4 +1,5 @@
 #Vai representar um item da compra.
+import json
 
 class Item:
     def __init__(self, produto, preco_unitario, quantidade):
@@ -9,3 +10,6 @@ class Item:
 
     def calcular_total_item(self):
         return self.preco_unitario * self.quantidade
+    
+    def to_dict(self):
+        pass

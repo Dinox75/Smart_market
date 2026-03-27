@@ -51,7 +51,6 @@ def validar_preco():
 
 def validar_mercado():
     while True:
-        try:
             mercado = input("Digite o mercado: ").strip()
 
             if mercado == "":
@@ -59,9 +58,6 @@ def validar_mercado():
                 continue
 
             return mercado.title()
-    
-        except ValueError:
-            print("Insira um nome valido")
 
 def validar_data():
     while True:
@@ -80,7 +76,7 @@ def validar_data():
 
 def validar_hora():
     while True:
-        hora = input("Insira a hora da compra: ")
+        hora = input("Insira a hora da compra: ").strip()
 
         if hora == "":
             print("A hora não pode estar vazia")
@@ -90,5 +86,5 @@ def validar_hora():
             datetime.strptime(hora, "%H:%M")
             return hora
         except ValueError:
-            print("Digite uma hora valida no formato Hh/Mm")
+            print("Digite uma hora valida no formato hh:mm")
 

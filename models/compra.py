@@ -1,4 +1,5 @@
 #Vai representar uma compra
+import json
 
 class Compra:
     def __init__(self, mercado, data, hora):
@@ -27,5 +28,9 @@ class Compra:
             self.total_itens = self.calcular_total_itens()
         else:
             print("Item não existe")
+
+
+    def to_dict(self):
+        pass
 
     

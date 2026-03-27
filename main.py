@@ -1,32 +1,34 @@
-#Ponto de entrada do projeto.
-#Daqui que tudo começa.
+# Ponto de entrada do projeto.
+# Daqui que tudo começa.
+
 from models.compra import Compra
 from models.item import Item
+from utils.validacoes import validar_produto, validar_quantidade, validar_preco
 
-mercado = input("Digite o mercado: ")
-data_agora = input("Data da compra: ")
-hora_agora = input("Hora da compra: ")
+mercado = input("Digite o mercado: ").strip()
+data_agora = input("Data da compra: ").strip()
+hora_agora = input("Hora da compra: ").strip()
 
 compra = Compra(mercado, data_agora, hora_agora)
 
 while True:
-    produto = input("Item a adicionar: ")
-    quantidade = int(input("Quantos produtos foram comprados?: "))
-    
-    preco_str = input("Informe o preço do produto(unidade): ")
-    preco_str = preco_str.replace(",", ".")
-    preco_unitario = float(preco_str)
+    produto = validar_produto()
+    quantidade = validar_quantidade()
+    preco_unitario = validar_preco()
 
     item = Item(produto, preco_unitario, quantidade)
     compra.adicionar_item(item)
 
-    continuar = input("Continuar?(s/n): ").lower()
+    continuar = input("Continuar? (s/n): ").lower().strip()
 
-
-    if continuar == "s":
-        continue
     if continuar == "n":
         break
+    elif continuar != "s":
+        print("Opção inválida. O programa continuará adicionando itens.")
 
+print("\n--- Resumo da compra ---")
+print(f"Mercado: {compra.mercado}")
+print(f"Data: {compra.data}")
+print(f"Hora: {compra.hora}")
 print(f"Total de itens: {compra.total_itens}")
 print(f"Total da compra: R$ {compra.total_compra:.2f}")

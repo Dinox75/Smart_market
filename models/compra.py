@@ -31,6 +31,18 @@ class Compra:
 
 
     def to_dict(self):
-        pass
+        self.total_compra = self.calcular_total_compra()
+        self.total_itens = self.calcular_total_itens()
+        
+        
+        return {
+            "mercado": self.mercado,
+            "data": self.data,
+            "hora": self.hora,
+            "total_compra": self.total_compra,
+            "total_itens": self.total_itens,
+            "itens": [item.to_dict() for item in self.lista_itens]
+        
+        }
 
     

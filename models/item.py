@@ -12,4 +12,11 @@ class Item:
         return self.preco_unitario * self.quantidade
     
     def to_dict(self):
-        pass
+        self.calcular_total_item()
+        
+        return {
+            "produto": self.produto,
+            "preco_unitario": self.preco_unitario,
+            "quantidade": self.quantidade,
+            "total_item": self.total_item
+        }

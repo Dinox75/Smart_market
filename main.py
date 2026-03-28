@@ -11,6 +11,7 @@ from utils.validacoes import (
     validar_quantidade,
     validar_preco
 )
+from services.historico import salvar_compra
 
 mercado = validar_mercado()
 data_agora = validar_data()
@@ -39,3 +40,6 @@ print(f"Data: {compra.data}")
 print(f"Hora: {compra.hora}")
 print(f"Total de itens: {compra.total_itens}")
 print(f"Total da compra: R$ {compra.total_compra:.2f}")
+
+salvar_compra(compra)
+print("Compra salva com sucesso no historico")

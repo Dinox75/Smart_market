@@ -1,0 +1,41 @@
+[
+    {
+        "mercado": "Azul Mark",
+        "data": "22/11/2025",
+        "hora": "15:25",
+        "total_compra": 45.300000000000004,
+        "total_itens": 10,
+        "itens": [
+            {
+                "produto": "Pasta De Dente",
+                "preco_unitario": 2.5,
+                "quantidade": 2,
+                "total_item": 5.0
+            },
+            {
+                "produto": "Pao De Forma",
+                "preco_unitario": 5.99,
+                "quantidade": 2,
+                "total_item": 11.98
+            },
+            {
+                "produto": "Cha Leao",
+                "preco_unitario": 3.45,
+                "quantidade": 3,
+                "total_item": 10.350000000000001
+            },
+            {
+                "produto": "Nescau",
+                "preco_unitario": 9.99,
+                "quantidade": 1,
+                "total_item": 9.99
+            },
+            {
+                "produto": "Sal Do Reino",
+                "preco_unitario": 3.99,
+                "quantidade": 2,
+                "total_item": 7.98
+            }
+        ]
+    }
+]

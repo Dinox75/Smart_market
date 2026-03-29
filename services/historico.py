@@ -26,3 +26,16 @@ def salvar_compra(compra):
         json.dump(lista_compras, arquivo, indent=4, ensure_ascii=False)
 
 
+def carregar_compras():
+    caminho_arquivo = "data/compras.json"
+    if not os.path.exists(caminho_arquivo):
+        return []
+
+    with open(caminho_arquivo, "r", encoding="utf-8") as arquivo:
+        try:
+            lista_compras = json.load(arquivo)
+
+        except json.JSONDecodeError:
+            return []
+        
+        return lista_compras

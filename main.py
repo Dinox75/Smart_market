@@ -11,38 +11,57 @@ from utils.validacoes import (
     validar_quantidade,
     validar_preco
 )
-from services.historico import salvar_compra
 from services.historico import carregar_compras, salvar_compra
-from services.comparacoes import comparar_compras
+from services.comparacoes import comparar_compras, exibir_relatorio_comparacao
 
-mercado = validar_mercado()
-data_agora = validar_data()
-hora_agora = validar_hora()
 
-compra = Compra(mercado, data_agora, hora_agora)
+def criar_compra():
+    mercado = validar_mercado()
+    data_agora = validar_data()
+    hora_agora = validar_hora()
 
-while True:
-    produto = validar_produto()
-    quantidade = validar_quantidade()
-    preco_unitario = validar_preco()
+    compra = Compra(mercado, data_agora, hora_agora)
 
-    item = Item(produto, preco_unitario, quantidade)
-    compra.adicionar_item(item)
+    while True:
+        produto = validar_produto()
+        quantidade = validar_quantidade()
+        preco_unitario = validar_preco()
 
-    continuar = input("Continuar? (s/n): ").lower().strip()
+        item = Item(produto, preco_unitario, quantidade)
+        compra.adicionar_item(item)
 
-    if continuar == "n":
-        break
-    elif continuar != "s":
-        print("Opção inválida. O programa continuará adicionando itens.")
+        continuar = input("Continuar? (s/n): ").lower().strip()
 
-print("\n--- Resumo da compra ---")
-print(f"Mercado: {compra.mercado}")
-print(f"Data: {compra.data}")
-print(f"Hora: {compra.hora}")
-print(f"Total de itens: {compra.total_itens}")
-print(f"Total da compra: R$ {compra.total_compra:.2f}")
+        if continuar == "n":
+            break
+        elif continuar != "s":
+            print("Opção inválida. O programa continuará adicionando itens.")
 
-historico = carregar_compras()
-salvar_compra(compra)
-print("Compra salva com sucesso no historico")
+    return compra
+
+
+def mostrar_resumo(compra):
+    print("\n--- Resumo da compra ---")
+    print(f"Mercado: {compra.mercado}")
+    print(f"Data: {compra.data}")
+    print(f"Hora: {compra.hora}")
+    print(f"Total de itens: {compra.total_itens}")
+    print(f"Total da compra: R$ {compra.total_compra:.2f}")
+
+
+def main():
+    compra = criar_compra()
+    mostrar_resumo(compra)
+
+    historico = carregar_compras()
+    if historico:
+        ultima_compra = historico[-1]
+        resultado = comparar_compras(compra.to_dict(), ultima_compra)
+        exibir_relatorio_comparacao(resultado)
+
+    salvar_compra(compra)
+    print("Compra salva com sucesso no historico")
+
+
+if __name__ == "__main__":
+    main()

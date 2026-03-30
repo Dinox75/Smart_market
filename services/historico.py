@@ -1,41 +1,41 @@
 #Salvar e carregar compras do histórico.
 import json
-import os
+from pathlib import Path
+
+
+def obter_caminho_historico():
+    return Path(__file__).resolve().parent.parent / "data" / "compras.json"
 
 
 def salvar_compra(compra):
     nova_compra = compra.to_dict()
-    caminho_arquivo = "data/compras.json"
+    caminho_arquivo = obter_caminho_historico()
+    caminho_arquivo.parent.mkdir(parents=True, exist_ok=True)
 
-    #Verfica se o arquivo existe
-    if os.path.exists(caminho_arquivo):
-        with open(caminho_arquivo, "r", encoding="utf-8") as arquivo:
+    if caminho_arquivo.exists():
+        with caminho_arquivo.open("r", encoding="utf-8") as arquivo:
             try:
                 lista_compras = json.load(arquivo)
             except json.JSONDecodeError:
                 lista_compras = []
-
     else:
         lista_compras = []
 
-    #Adiciona a nova compra
     lista_compras.append(nova_compra)
 
-    #Salva no arquivo
-    with open(caminho_arquivo, "w", encoding="utf_8") as arquivo:
+    with caminho_arquivo.open("w", encoding="utf-8") as arquivo:
         json.dump(lista_compras, arquivo, indent=4, ensure_ascii=False)
 
 
 def carregar_compras():
-    caminho_arquivo = "data/compras.json"
-    if not os.path.exists(caminho_arquivo):
+    caminho_arquivo = obter_caminho_historico()
+    if not caminho_arquivo.exists():
         return []
 
-    with open(caminho_arquivo, "r", encoding="utf-8") as arquivo:
+    with caminho_arquivo.open("r", encoding="utf-8") as arquivo:
         try:
             lista_compras = json.load(arquivo)
-
         except json.JSONDecodeError:
             return []
-        
-        return lista_compras
+
+    return lista_compras

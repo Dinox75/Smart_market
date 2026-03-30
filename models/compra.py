@@ -1,5 +1,4 @@
 #Vai representar uma compra
-import json
 
 class Compra:
     def __init__(self, mercado, data, hora):

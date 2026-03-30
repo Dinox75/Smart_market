@@ -12,7 +12,6 @@ from utils.validacoes import (
     validar_preco
 )
 from services.historico import salvar_compra
-from services.historico import carregar_compras
 from services.historico import carregar_compras, salvar_compra
 from services.comparacoes import comparar_compras
 
@@ -44,8 +43,6 @@ print(f"Hora: {compra.hora}")
 print(f"Total de itens: {compra.total_itens}")
 print(f"Total da compra: R$ {compra.total_compra:.2f}")
 
-salvar_compra(compra)
-print("Compra salva com sucesso no historico")
-
 historico = carregar_compras()
 salvar_compra(compra)
+print("Compra salva com sucesso no historico")

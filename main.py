@@ -54,14 +54,63 @@ def main():
     mostrar_resumo(compra)
 
     historico = carregar_compras()
+    compra_atual = compra.to_dict()
+
     if historico:
-        ultima_compra = historico[-1]
-        resultado = comparar_compras(compra.to_dict(), ultima_compra)
+        compra_anterior = historico[-1]
+        resultado = comparar_compras(compra_atual, compra_anterior)
         exibir_relatorio_comparacao(resultado)
 
     salvar_compra(compra)
-    print("Compra salva com sucesso no historico")
+    print("Compra salva com sucesso no histórico")
 
+def mostrar_historico():
+    historico = carregar_compras()
+
+    if not historico:
+        print("Nenhuma compra registrada no histórico.")
+        return
+    
+    print("\n--- Histórico de Compras ---")
+    for i, compra in enumerate(historico, start=1):
+        print(f"\nCompra {i}")
+        print(f"Mercado: {compra['mercado']}")
+        print(f"Data: {compra['data']}")
+        print(f"Hora: {compra['hora']}")
+        print(f"Total de itens: {compra['total_itens']}")
+        print(f"Total da compra: R$ {compra['total_compra']:.2f}")
+
+
+def main():
+    while True:
+        opcao = mostrar_menu()
+
+        if opcao == "1":
+            compra = criar_compra()
+            mostrar_resumo(compra)
+
+            historico = carregar_compras()
+            compra_atual = compra.to_dict()
+
+            if historico:
+                compra_anterior = historico[-1]
+                resultado = comparar_compras(compra_atual, compra_anterior)
+                exibir_relatorio_comparacao(resultado)
+
+            salvar_compra(compra)
+            print("Compra salva com sucesso no histórico")
+
+        elif opcao == "2":
+            mostrar_historico()
+                
+
+        elif opcao == "3":
+            print("Comparar compras")
+        elif opcao == "4":
+            print("Saindo...")
+            break
+        else:
+            print("Opção inválida.")
 
 if __name__ == "__main__":
     main()

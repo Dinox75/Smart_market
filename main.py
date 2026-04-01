@@ -49,20 +49,16 @@ def mostrar_resumo(compra):
     print(f"Total da compra: R$ {compra.total_compra:.2f}")
 
 
-def main():
-    compra = criar_compra()
-    mostrar_resumo(compra)
+def mostrar_menu():
+    print("\n--- SMART MARKET ---")
+    print("1 - Registrar nova compra")
+    print("2 - Ver histórico")
+    print("3 - Comparar compras")
+    print("4 - Sair")
 
-    historico = carregar_compras()
-    compra_atual = compra.to_dict()
+    opcao = input("Escolha uma opção: ").strip()
+    return opcao
 
-    if historico:
-        compra_anterior = historico[-1]
-        resultado = comparar_compras(compra_atual, compra_anterior)
-        exibir_relatorio_comparacao(resultado)
-
-    salvar_compra(compra)
-    print("Compra salva com sucesso no histórico")
 
 def mostrar_historico():
     historico = carregar_compras()
@@ -70,7 +66,7 @@ def mostrar_historico():
     if not historico:
         print("Nenhuma compra registrada no histórico.")
         return
-    
+
     print("\n--- Histórico de Compras ---")
     for i, compra in enumerate(historico, start=1):
         print(f"\nCompra {i}")
@@ -79,6 +75,18 @@ def mostrar_historico():
         print(f"Hora: {compra['hora']}")
         print(f"Total de itens: {compra['total_itens']}")
         print(f"Total da compra: R$ {compra['total_compra']:.2f}")
+
+        ver_itens = input("Deseja ver os itens desta compra? (s/n): ").lower().strip()
+
+        if ver_itens == "s":
+            print("Itens da compra:")
+            for item in compra["itens"]:
+                print(
+                    f"- {item['produto']} | "
+                    f"R$ {item['preco_unitario']:.2f} | "
+                    f"Qtd: {item['quantidade']} | "
+                    f"Total: R$ {item['total_item']:.2f}"
+                )
 
 
 def main():
@@ -98,19 +106,21 @@ def main():
                 exibir_relatorio_comparacao(resultado)
 
             salvar_compra(compra)
-            print("Compra salva com sucesso no histórico")
+            print("Compra salva com sucesso no histórico.")
 
         elif opcao == "2":
             mostrar_historico()
-                
 
         elif opcao == "3":
             print("Comparar compras")
+
         elif opcao == "4":
             print("Saindo...")
             break
+
         else:
             print("Opção inválida.")
+
 
 if __name__ == "__main__":
     main()

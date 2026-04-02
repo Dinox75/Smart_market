@@ -53,7 +53,7 @@ def mostrar_menu():
     print("\n--- SMART MARKET ---")
     print("1 - Registrar nova compra")
     print("2 - Ver histórico")
-    print("3 - Comparar compras")
+    print("3 - Comparar últimas compras")
     print("4 - Sair")
 
     opcao = input("Escolha uma opção: ").strip()
@@ -89,6 +89,30 @@ def mostrar_historico():
                 )
 
 
+def comparar_ultimas_compras():
+    historico = carregar_compras()
+
+    if len(historico) < 2:
+        print("É necessário ter pelo menos duas compras no histórico para comparar.")
+        return
+
+    compra_atual = historico[-1]
+    compra_anterior = historico[-2]
+
+    print("\n--- Comparando as duas últimas compras ---")
+    print(
+        f"Compra anterior: {compra_anterior['mercado']} - "
+        f"{compra_anterior['data']} às {compra_anterior['hora']}"
+    )
+    print(
+        f"Compra atual: {compra_atual['mercado']} - "
+        f"{compra_atual['data']} às {compra_atual['hora']}"
+    )
+
+    resultado = comparar_compras(compra_atual, compra_anterior)
+    exibir_relatorio_comparacao(resultado)
+
+
 def main():
     while True:
         opcao = mostrar_menu()
@@ -112,7 +136,7 @@ def main():
             mostrar_historico()
 
         elif opcao == "3":
-            print("Comparar compras")
+            comparar_ultimas_compras()
 
         elif opcao == "4":
             print("Saindo...")

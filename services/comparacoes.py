@@ -5,82 +5,63 @@
 
 
 def comparar_compras(compra_atual, compra_anterior):
-    itens_atual = compra_atual["itens"]
-    itens_anterior = compra_anterior["itens"]
-
-    itens_atual_dict = {
-        item["produto"]: item
-        for item in itens_atual
-    }
-
-    itens_anterior_dict = {
-        item["produto"]: item
-        for item in itens_anterior
-    }
-
     aumentaram = []
     diminuiram = []
     mantiveram = []
     novos_produtos = []
     removidos = []
 
-    for nome_produto in itens_atual_dict:
-        if nome_produto in itens_anterior_dict:
-            preco_atual = itens_atual_dict[nome_produto]["preco_unitario"]
-            preco_anterior = itens_anterior_dict[nome_produto]["preco_unitario"]
+    produtos_anterior = {item["produto"]: item for item in compra_anterior["itens"]}
+    produtos_atual = {item["produto"]: item for item in compra_atual["itens"]}
 
-            quantidade_atual = itens_atual_dict[nome_produto]["quantidade"]
-            quantidade_anterior = itens_anterior_dict[nome_produto]["quantidade"]
+    for produto, item_atual in produtos_atual.items():
+        if produto in produtos_anterior:
+            item_anterior = produtos_anterior[produto]
+            diferenca_preco = item_atual["preco_unitario"] - item_anterior["preco_unitario"]
 
-            dado_produto = {
-                "produto": nome_produto,
-                "preco_atual": preco_atual,
-                "preco_anterior": preco_anterior,
-                "diferenca_preco": preco_atual - preco_anterior,
-                "quantidade_atual": quantidade_atual,
-                "quantidade_anterior": quantidade_anterior,
-                "diferenca_quantidade": quantidade_atual - quantidade_anterior
-            }
+            if diferenca_preco > 0:
+                aumentaram.append({
+                    "produto": produto,
+                    "preco_anterior": item_anterior["preco_unitario"],
+                    "preco_atual": item_atual["preco_unitario"],
+                    "diferenca_preco": diferenca_preco,
+                    "quantidade_anterior": item_anterior["quantidade"],
+                    "quantidade_atual": item_atual["quantidade"]
+                })
 
-            if preco_atual > preco_anterior:
-                aumentaram.append(dado_produto)
-            elif preco_atual < preco_anterior:
-                diminuiram.append(dado_produto)
+            elif diferenca_preco < 0:
+                diminuiram.append({
+                    "produto": produto,
+                    "preco_anterior": item_anterior["preco_unitario"],
+                    "preco_atual": item_atual["preco_unitario"],
+                    "diferenca_preco": diferenca_preco,
+                    "quantidade_anterior": item_anterior["quantidade"],
+                    "quantidade_atual": item_atual["quantidade"]
+                })
+
             else:
-                mantiveram.append(dado_produto)
+                mantiveram.append({
+                    "produto": produto,
+                    "preco_anterior": item_anterior["preco_unitario"],
+                    "preco_atual": item_atual["preco_unitario"],
+                    "quantidade_anterior": item_anterior["quantidade"],
+                    "quantidade_atual": item_atual["quantidade"]
+                })
 
         else:
-            preco_atual = itens_atual_dict[nome_produto]["preco_unitario"]
-            quantidade_atual = itens_atual_dict[nome_produto]["quantidade"]
+            novos_produtos.append({
+                "produto": produto,
+                "preco_atual": item_atual["preco_unitario"],
+                "quantidade_atual": item_atual["quantidade"]
+            })
 
-            dado_produto = {
-                "produto": nome_produto,
-                "preco_atual": preco_atual,
-                "preco_anterior": None,
-                "diferenca_preco": None,
-                "quantidade_atual": quantidade_atual,
-                "quantidade_anterior": None,
-                "diferenca_quantidade": None
-            }
-
-            novos_produtos.append(dado_produto)
-
-    for nome_produto in itens_anterior_dict:
-        if nome_produto not in itens_atual_dict:
-            preco_anterior = itens_anterior_dict[nome_produto]["preco_unitario"]
-            quantidade_anterior = itens_anterior_dict[nome_produto]["quantidade"]
-
-            dado_produto = {
-                "produto": nome_produto,
-                "preco_atual": None,
-                "preco_anterior": preco_anterior,
-                "diferenca_preco": None,
-                "quantidade_atual": None,
-                "quantidade_anterior": quantidade_anterior,
-                "diferenca_quantidade": None
-            }
-
-            removidos.append(dado_produto)
+    for produto, item_anterior in produtos_anterior.items():
+        if produto not in produtos_atual:
+            removidos.append({
+                "produto": produto,
+                "preco_anterior": item_anterior["preco_unitario"],
+                "quantidade_anterior": item_anterior["quantidade"]
+            })
 
     return {
         "aumentaram": aumentaram,
@@ -89,6 +70,7 @@ def comparar_compras(compra_atual, compra_anterior):
         "novos_produtos": novos_produtos,
         "removidos": removidos
     }
+
 
 def exibir_relatorio_comparacao(resultado):
     print("\n--- Relatório de Comparação ---")

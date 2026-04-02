@@ -1,6 +1,6 @@
 # 🛒 Smart Market
 
-Sistema em Python para controle de compras de supermercado, permitindo registrar itens, calcular gastos e armazenar histórico para futuras análises.
+Sistema em Python para controle de compras de supermercado, com foco em análise de consumo, variação de preços e organização de histórico.
 
 ---
 
@@ -8,137 +8,150 @@ Sistema em Python para controle de compras de supermercado, permitindo registrar
 
 Este projeto foi desenvolvido com foco em:
 
-* Aprender desenvolvimento em Python com boas práticas
-* Aplicar conceitos de programação orientada a objetos (POO)
-* Criar um sistema real de controle de compras
-* Construir base para análises futuras (comparação de preços, consumo, etc.)
-* Evoluir futuramente para um aplicativo completo
+- Aprender Python na prática com um projeto real
+- Aplicar conceitos de Programação Orientada a Objetos (POO)
+- Criar um sistema útil para controle de gastos
+- Evoluir para análises inteligentes de consumo
+- Construir base para um futuro aplicativo completo
 
 ---
 
 ## 🧠 Funcionalidades atuais
 
-✔️ Cadastro de compras via terminal
-✔️ Adição de múltiplos itens
-✔️ Cálculo automático:
+### 📌 Cadastro de compras
+✔️ Registro completo de compras via terminal  
+✔️ Adição de múltiplos itens  
+✔️ Validação de entradas do usuário  
 
-* Total por item
-* Total da compra
-* Quantidade total de itens
+---
 
-✔️ Validação de dados:
+### 📊 Cálculos automáticos
+✔️ Total por item  
+✔️ Total da compra  
+✔️ Quantidade total de itens  
 
-* Nome do produto obrigatório
-* Quantidade válida (> 0)
-* Preço válido (aceita vírgula e ponto)
-* Data no formato `dd/mm/aaaa`
-* Hora no formato `hh:mm`
+---
 
-✔️ Persistência de dados:
+### 💾 Persistência de dados
+✔️ Armazenamento em arquivo JSON  
+✔️ Histórico acumulado de compras  
 
-* As compras são salvas em arquivo JSON
-* Histórico acumulado de compras
+---
+
+### 📂 Histórico interativo
+✔️ Visualização de todas as compras realizadas  
+✔️ Exibição opcional dos itens de cada compra  
+✔️ Estrutura organizada para leitura  
+
+---
+
+### 📈 Comparação de compras
+✔️ Comparação automática ao registrar nova compra  
+✔️ Comparação manual entre as duas últimas compras  
+
+Identifica:
+
+- 📈 Produtos que aumentaram de preço  
+- 📉 Produtos que diminuíram  
+- ➖ Produtos com preço mantido  
+- 🆕 Novos produtos  
+- ❌ Produtos removidos  
+
+Além disso:
+
+- Diferença de preço  
+- Comparação de quantidade  
+
+---
+
+### 🧭 Menu interativo
+✔️ Sistema com navegação por menu  
+✔️ Separação clara das funcionalidades  
+✔️ Melhor experiência de uso no terminal  
 
 ---
 
 ## 📂 Estrutura do Projeto
-
-```
 Smart_market/
 │
 ├── main.py
 │
 ├── models/
-│   ├── compra.py
-│   └── item.py
+│ ├── compra.py
+│ └── item.py
 │
 ├── utils/
-│   └── validacoes.py
+│ └── validacoes.py
 │
 ├── services/
-│   └── historico.py
+│ ├── historico.py
+│ └── comparacoes.py
 │
 ├── data/
-│   └── compras.json
+│ └── compras.json
 │
 └── README.md
-```
+
 
 ---
 
 ## ⚙️ Como executar
 
-1. Clone o repositório:
+### 1. Clone o repositório
 
-```
+```bash
 git clone <URL_DO_REPOSITORIO>
-```
-
-2. Acesse a pasta do projeto:
-
-```
+2. Acesse a pasta
 cd Smart_market
-```
-
-3. Execute o programa:
-
-```
+3. Execute o projeto
 python main.py
-```
 
----
+💡 Como usar
 
-## 💡 Como usar
+Ao iniciar o sistema, você verá um menu:
 
-1. Informe:
+1 - Registrar nova compra
+2 - Ver histórico
+3 - Comparar compras
+4 - Sair
 
-   * Nome do mercado
-   * Data da compra
-   * Hora da compra
+📌 Registrar compra
 
-2. Adicione itens:
+Informe mercado, data e hora
+Adicione produtos com quantidade e preço
+Veja resumo automático
+Comparação com compra anterior (se existir)
 
-   * Nome do produto
-   * Quantidade
-   * Preço unitário
+📌 Ver histórico
 
-3. Continue adicionando itens ou finalize
+Visualize todas as compras registradas
+Opção de ver os itens de cada compra
 
-4. O sistema irá:
+📌 Comparar compras
 
-   * Mostrar o resumo da compra
-   * Salvar automaticamente no histórico
+Compara automaticamente as duas últimas compras do histórico
+Mostra variação de preços e quantidade
 
----
+📊 Próximas melhorias
+Comparar qualquer compra do histórico
+Análise de consumo por produto
+Relatórios mais avançados
+Interface gráfica (Web ou Desktop)
+Dashboard com gráficos
+Leitura de nota fiscal (OCR)
+Exportação de relatórios
+🧑‍💻 Tecnologias utilizadas
+Python 3
+JSON (armazenamento de dados)
 
-## 📊 Próximas melhorias
+Programação Orientada a Objetos (POO)
 
-* Comparação com compras anteriores
-* Análise de aumento e queda de preços
-* Consumo por produto
-* Interface gráfica (GUI ou Web)
-* Dashboard com gráficos
-* Integração com leitura de nota fiscal (OCR)
-
----
-
-## 🧑‍💻 Tecnologias utilizadas
-
-* Python 3
-* JSON (armazenamento de dados)
-* Programação Orientada a Objetos (POO)
-
----
-
-## 📌 Status do Projeto
+📌 Status do Projeto
 
 🚧 Em desenvolvimento contínuo
 
----
-
-## ✍️ Autor
+✍️ Autor
 
 Vinicius Lima
-Projeto desenvolvido para aprendizado e evolução na área de desenvolvimento de software.
 
----
+Projeto desenvolvido com foco em aprendizado prático, evolução profissional e construção de portfólio.

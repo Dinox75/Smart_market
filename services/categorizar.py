@@ -18,3 +18,20 @@ def carregar_categorias():
 def salvar_categorias(categorias):
     with open(CAMINHO_CATEGORIAS, 'w', encoding='utf-8') as f:
         json.dump(categorias, f, ensure_ascii=False, indent=4)
+
+
+def obter_categoria_produto(nome_produto):
+    produto = nome_produto.lower().strip()
+
+    categorias = carregar_categorias()
+    
+    if produto in categorias:
+        return categorias[produto]
+    
+    categoria = "Outros"
+
+    categorias[produto] = categoria
+    salvar_categorias(categorias)
+
+    return categoria
+

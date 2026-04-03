@@ -37,5 +37,32 @@
                 "total_item": 7.98
             }
         ]
+    },
+    {
+        "mercado": "Economart",
+        "data": "03/04/2026",
+        "hora": "12:30",
+        "total_compra": 32.02,
+        "total_itens": 8,
+        "itens": [
+            {
+                "produto": "Cebola",
+                "preco_unitario": 1.24,
+                "quantidade": 2,
+                "total_item": 2.48
+            },
+            {
+                "produto": "Refrigerante",
+                "preco_unitario": 8.99,
+                "quantidade": 2,
+                "total_item": 17.98
+            },
+            {
+                "produto": "Detergente Ype 500Ml",
+                "preco_unitario": 2.89,
+                "quantidade": 4,
+                "total_item": 11.56
+            }
+        ]
     }
 ]

@@ -144,12 +144,64 @@ def comparar_compras_escolhidas():
     compra1 = historico[escolha1 - 1]
     compra2 = historico[escolha2 - 1]
 
+    total_anterior = compra1["total_compra"]
+    total_atual = compra2["total_compra"]
+    diferenca_total = total_atual - total_anterior
+
+    total_itens_anterior = compra1["total_itens"]
+    total_itens_atual = compra2["total_itens"] 
+    diferenca_itens = total_itens_atual - total_itens_anterior
+
     print("\n--- Comparando as compras escolhidas ---")
     print(f"Compra 1: {compra1['mercado']} - {compra1['data']} às {compra1['hora']}")
     print(f"Compra 2: {compra2['mercado']} - {compra2['data']} às {compra2['hora']}")
 
+    print("\n--- Resumo geral da comparação ---")
+    print(f"Total anterior: R$ {total_anterior:.2f}")
+    print(f"Total atual: R$ {total_atual:.2f}")
+    print(f"Diferença total: R$ {diferenca_total:+.2f}")
+
+    print(f"Total de itens anterior: {total_itens_anterior}")
+    print(f"Total de itens atual: {total_itens_atual}")
+    print(f"Diferença de itens: {diferenca_itens}")
+
     resultado = comparar_compras(compra2, compra1)
     exibir_relatorio_comparacao(resultado)
+
+    def analisar_consumo_por_produto():
+        historico = carregar_compras()
+
+        if not historico:
+            print("Nenhuma compra registrada no histórico.")
+            return
+
+        consumo_produtos = {}
+
+        for compra in historico:
+            for item in compra["itens"]:
+                produto = item["produto"]
+                quantidade = item["quantidade"]
+                valor = item["total_item"]
+
+                if produto not in consumo_produtos:
+                    consumo_produtos[produto] = {
+                        "quantidade_total": 0,
+                        "valor_total": 0.0
+                    }
+
+                consumo_produtos[produto]["quantidade_total"] += quantidade
+                consumo_produtos[produto]["valor_total"] += valor
+
+        print("\n--- Consumo por produto ---")
+
+        for produto, dados in consumo_produtos.items():
+            print(
+                f"{produto}: "
+                f"{dados['quantidade_total']} unidades | "
+                f"Total gasto: R$ {dados['valor_total']:.2f}"
+            )
+
+
 
 def main():
     while True:

@@ -112,6 +112,44 @@ def comparar_ultimas_compras():
     resultado = comparar_compras(compra_atual, compra_anterior)
     exibir_relatorio_comparacao(resultado)
 
+def comparar_compras_escolhidas():
+    historico = carregar_compras()
+
+    if len(historico) < 2:
+        print("É necessário ter pelo menos duas compras no histórico para comparar.")
+        return
+
+    print("\n--- Compras disponíveis para comparação ---")
+    for i, compra in enumerate(historico, start=1):
+        print(f"{i} - {compra['mercado']} - {compra['data']} às {compra['hora']}")
+
+    try:
+        escolha1 = int(input("Escolha a primeira compra (número): "))
+        escolha2 = int(input("Escolha a segunda compra (número): "))
+    except ValueError:
+        print("Entrada inválida. Digite apenas números.")
+        return
+
+    if (
+        escolha1 < 1 or escolha1 > len(historico)
+        or escolha2 < 1 or escolha2 > len(historico)
+    ):
+        print("Escolha inválida.")
+        return
+
+    if escolha1 == escolha2:
+        print("Escolha duas compras diferentes para comparar.")
+        return
+
+    compra1 = historico[escolha1 - 1]
+    compra2 = historico[escolha2 - 1]
+
+    print("\n--- Comparando as compras escolhidas ---")
+    print(f"Compra 1: {compra1['mercado']} - {compra1['data']} às {compra1['hora']}")
+    print(f"Compra 2: {compra2['mercado']} - {compra2['data']} às {compra2['hora']}")
+
+    resultado = comparar_compras(compra2, compra1)
+    exibir_relatorio_comparacao(resultado)
 
 def main():
     while True:
@@ -136,7 +174,7 @@ def main():
             mostrar_historico()
 
         elif opcao == "3":
-            comparar_ultimas_compras()
+            comparar_compras_escolhidas()
 
         elif opcao == "4":
             print("Saindo...")

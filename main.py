@@ -13,6 +13,7 @@ from utils.validacoes import (
 )
 from services.historico import carregar_compras, salvar_compra
 from services.comparacoes import comparar_compras, exibir_relatorio_comparacao
+from services.categorizar import obter_categoria_produto
 
 
 def criar_compra():
@@ -24,6 +25,8 @@ def criar_compra():
 
     while True:
         produto = validar_produto()
+        categoria = obter_categoria_produto(produto)
+
         quantidade = validar_quantidade()
         preco_unitario = validar_preco()
 
@@ -53,7 +56,7 @@ def mostrar_menu():
     print("\n--- SMART MARKET ---")
     print("1 - Registrar nova compra")
     print("2 - Ver histórico")
-    print("3 - Comparar últimas compras")
+    print("3 - Comparar compras")
     print("4 - Sair")
 
     opcao = input("Escolha uma opção: ").strip()
@@ -112,6 +115,7 @@ def comparar_ultimas_compras():
     resultado = comparar_compras(compra_atual, compra_anterior)
     exibir_relatorio_comparacao(resultado)
 
+
 def comparar_compras_escolhidas():
     historico = carregar_compras()
 
@@ -149,7 +153,7 @@ def comparar_compras_escolhidas():
     diferenca_total = total_atual - total_anterior
 
     total_itens_anterior = compra1["total_itens"]
-    total_itens_atual = compra2["total_itens"] 
+    total_itens_atual = compra2["total_itens"]
     diferenca_itens = total_itens_atual - total_itens_anterior
 
     print("\n--- Comparando as compras escolhidas ---")
@@ -163,44 +167,43 @@ def comparar_compras_escolhidas():
 
     print(f"Total de itens anterior: {total_itens_anterior}")
     print(f"Total de itens atual: {total_itens_atual}")
-    print(f"Diferença de itens: {diferenca_itens}")
+    print(f"Diferença de itens: {diferenca_itens:+}")
 
     resultado = comparar_compras(compra2, compra1)
     exibir_relatorio_comparacao(resultado)
 
-    def analisar_consumo_por_produto():
-        historico = carregar_compras()
 
-        if not historico:
-            print("Nenhuma compra registrada no histórico.")
-            return
+def analisar_consumo_por_produto():
+    historico = carregar_compras()
 
-        consumo_produtos = {}
+    if not historico:
+        print("Nenhuma compra registrada no histórico.")
+        return
 
-        for compra in historico:
-            for item in compra["itens"]:
-                produto = item["produto"]
-                quantidade = item["quantidade"]
-                valor = item["total_item"]
+    consumo_produtos = {}
 
-                if produto not in consumo_produtos:
-                    consumo_produtos[produto] = {
-                        "quantidade_total": 0,
-                        "valor_total": 0.0
-                    }
+    for compra in historico:
+        for item in compra["itens"]:
+            produto = item["produto"]
+            quantidade = item["quantidade"]
+            valor = item["total_item"]
 
-                consumo_produtos[produto]["quantidade_total"] += quantidade
-                consumo_produtos[produto]["valor_total"] += valor
+            if produto not in consumo_produtos:
+                consumo_produtos[produto] = {
+                    "quantidade_total": 0,
+                    "valor_total": 0.0
+                }
 
-        print("\n--- Consumo por produto ---")
+            consumo_produtos[produto]["quantidade_total"] += quantidade
+            consumo_produtos[produto]["valor_total"] += valor
 
-        for produto, dados in consumo_produtos.items():
-            print(
-                f"{produto}: "
-                f"{dados['quantidade_total']} unidades | "
-                f"Total gasto: R$ {dados['valor_total']:.2f}"
-            )
-
+    print("\n--- Consumo por produto ---")
+    for produto, dados in consumo_produtos.items():
+        print(
+            f"{produto}: "
+            f"{dados['quantidade_total']} unidades | "
+            f"Total gasto: R$ {dados['valor_total']:.2f}"
+        )
 
 
 def main():

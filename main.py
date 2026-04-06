@@ -30,7 +30,7 @@ def criar_compra():
         quantidade = validar_quantidade()
         preco_unitario = validar_preco()
 
-        item = Item(produto, preco_unitario, quantidade)
+        item = Item(produto, preco_unitario, quantidade, categoria)
         compra.adicionar_item(item)
 
         continuar = input("Continuar? (s/n): ").lower().strip()

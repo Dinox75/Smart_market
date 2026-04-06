@@ -1,78 +1,39 @@
 [
     {
-        "mercado": "Azul Mark",
-        "data": "22/11/2025",
-        "hora": "15:25",
-        "total_compra": 45.300000000000004,
-        "total_itens": 10,
+        "mercado": "Small Ville",
+        "data": "06/04/2026",
+        "hora": "14:23",
+        "total_compra": 85.83,
+        "total_itens": 17,
         "itens": [
             {
-                "produto": "Pasta De Dente",
-                "preco_unitario": 2.5,
-                "quantidade": 2,
-                "total_item": 5.0
+                "produto": "Cebola Roxa 100G",
+                "preco_unitario": 0.99,
+                "quantidade": 11,
+                "categoria": "Hortifruti",
+                "total_item": 10.89
             },
             {
-                "produto": "Pao De Forma",
-                "preco_unitario": 5.99,
-                "quantidade": 2,
-                "total_item": 11.98
-            },
-            {
-                "produto": "Cha Leao",
-                "preco_unitario": 3.45,
-                "quantidade": 3,
-                "total_item": 10.350000000000001
-            },
-            {
-                "produto": "Nescau",
-                "preco_unitario": 9.99,
-                "quantidade": 1,
-                "total_item": 9.99
-            },
-            {
-                "produto": "Sal Do Reino",
-                "preco_unitario": 3.99,
-                "quantidade": 2,
-                "total_item": 7.98
-            }
-        ]
-    },
-    {
-        "mercado": "Economart",
-        "data": "03/04/2026",
-        "hora": "12:30",
-        "total_compra": 32.02,
-        "total_itens": 8,
-        "itens": [
-            {
-                "produto": "Cebola",
-                "preco_unitario": 1.24,
-                "quantidade": 2,
-                "total_item": 2.48
-            },
-            {
-                "produto": "Refrigerante",
+                "produto": "Coca Cola 2Lt",
                 "preco_unitario": 8.99,
-                "quantidade": 2,
-                "total_item": 17.98
+                "quantidade": 4,
+                "categoria": "Bebidas",
+                "total_item": 35.96
             },
             {
-                "produto": "Detergente Ype 500Ml",
-                "preco_unitario": 2.89,
-                "quantidade": 4,
-                "total_item": 11.56
+                "produto": "Salgadinho Doritos 230G",
+                "preco_unitario": 16.99,
+                "quantidade": 1,
+                "categoria": "Mercearia",
+                "total_item": 16.99
+            },
+            {
+                "produto": "Peito De Frango 1Kg",
+                "preco_unitario": 21.99,
+                "quantidade": 1,
+                "categoria": "Açougue",
+                "total_item": 21.99
             }
-        ]
-    },
-    {
-        "mercado": "Azulao Atacarejo",
-        "data": "01/04/2025",
-        "hora": "03:22",
-        "total_compra": 11.34,
-        "total_itens": 2,
-        "itens": [
-           
         ]
     }
 ]

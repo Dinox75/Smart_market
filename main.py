@@ -205,12 +205,14 @@ def analisar_consumo_por_categoria():
             consumo_categorias[categoria]["quantidade_total"] += quantidade
             consumo_categorias[categoria]["valor_total"] += valor
 
-    print("\n--- Consumo por categoria ---")
-    for categoria, dados in consumo_categorias.items():
+    print("\n--- Top 3 categorias com maior gasto ---")
+
+    for i, (categoria, dados) in enumerate(
+        sorted(consumo_categorias.items(), key=lambda x: x[1]["valor_total"], reverse=True)[:3],
+        start=1
+    ):
         print(
-            f"{categoria}: "
-            f"{dados['quantidade_total']} unidades | "
-            f"Total gasto: R$ {dados['valor_total']:.2f}"
+            f"{i}º {categoria} - R$ {dados['valor_total']:.2f}"
         )
 
 

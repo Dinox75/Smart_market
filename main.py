@@ -57,7 +57,8 @@ def mostrar_menu():
     print("1 - Registrar nova compra")
     print("2 - Ver histórico")
     print("3 - Comparar compras")
-    print("4 - Sair")
+    print("4 - Analisar consumo por categoria")
+    print("5 - Sair")
 
     opcao = input("Escolha uma opção: ").strip()
     return opcao
@@ -84,8 +85,10 @@ def mostrar_historico():
         if ver_itens == "s":
             print("Itens da compra:")
             for item in compra["itens"]:
+                categoria = item.get("categoria", "Sem categoria")
+
                 print(
-                    f"- {item['produto']} | "
+                    f"- {item['produto']} ({categoria}) | "
                     f"R$ {item['preco_unitario']:.2f} | "
                     f"Qtd: {item['quantidade']} | "
                     f"Total: R$ {item['total_item']:.2f}"
@@ -173,14 +176,14 @@ def comparar_compras_escolhidas():
     exibir_relatorio_comparacao(resultado)
 
 
-def analisar_consumo_por_produto():
+def analisar_consumo_por_categoria():
     historico = carregar_compras()
 
     if not historico:
         print("Nenhuma compra registrada no histórico.")
         return
 
-    consumo_produtos = {}
+    consumo_categorias = {}
 
     for compra in historico:
         for item in compra["itens"]:
@@ -188,19 +191,24 @@ def analisar_consumo_por_produto():
             quantidade = item["quantidade"]
             valor = item["total_item"]
 
-            if produto not in consumo_produtos:
-                consumo_produtos[produto] = {
+            if "categoria" in item:
+                categoria = item["categoria"]
+            else:
+                categoria = obter_categoria_produto(produto)
+
+            if categoria not in consumo_categorias:
+                consumo_categorias[categoria] = {
                     "quantidade_total": 0,
                     "valor_total": 0.0
                 }
 
-            consumo_produtos[produto]["quantidade_total"] += quantidade
-            consumo_produtos[produto]["valor_total"] += valor
+            consumo_categorias[categoria]["quantidade_total"] += quantidade
+            consumo_categorias[categoria]["valor_total"] += valor
 
-    print("\n--- Consumo por produto ---")
-    for produto, dados in consumo_produtos.items():
+    print("\n--- Consumo por categoria ---")
+    for categoria, dados in consumo_categorias.items():
         print(
-            f"{produto}: "
+            f"{categoria}: "
             f"{dados['quantidade_total']} unidades | "
             f"Total gasto: R$ {dados['valor_total']:.2f}"
         )
@@ -232,6 +240,9 @@ def main():
             comparar_compras_escolhidas()
 
         elif opcao == "4":
+            analisar_consumo_por_categoria()
+
+        elif opcao == "5":
             print("Saindo...")
             break
 

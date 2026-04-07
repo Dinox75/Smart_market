@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Market - Controle de Compras</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        header {
+            text-align: center;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        header h1 i {
+            margin-right: 10px;
+        }
+        header p {
+            margin: 10px 0 0 0;
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        nav {
+            margin: 30px 0;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        nav button {
+            margin: 10px;
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #2196F3 0%, #21CBF3 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+        }
+        nav button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+        nav button i {
+            margin-right: 8px;
+        }
+        section {
+            background-color: white;
+            padding: 30px;
+            margin: 20px auto;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            max-width: 800px;
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        section.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+            box-sizing: border-box;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        .item {
+            background: #f9f9f9;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 5px solid #4CAF50;
+        }
+        button {
+            margin-top: 20px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #2196F3;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-shopping-cart"></i> Smart Market</h1>
+            <p>Controle inteligente das suas compras de supermercado</p>
+        </div>
+    </header>
+
+    <div class="container">
+        <nav>
+            <button onclick="showSection('registrar')"><i class="fas fa-plus-circle"></i> Registrar Compra</button>
+            <button onclick="showSection('historico')"><i class="fas fa-history"></i> Histórico</button>
+            <button onclick="showSection('comparar')"><i class="fas fa-chart-line"></i> Comparar</button>
+            <button onclick="showSection('analisar')"><i class="fas fa-chart-pie"></i> Analisar</button>
+        </nav>
+
+        <section id="registrar" class="active">
+            <h2><i class="fas fa-receipt"></i> Registrar Nova Compra</h2>
+            <form id="compraForm">
+                <div class="form-group">
+                    <label for="mercado"><i class="fas fa-store"></i> Mercado:</label>
+                    <input type="text" id="mercado" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="data"><i class="fas fa-calendar-alt"></i> Data:</label>
+                    <input type="date" id="data" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="hora"><i class="fas fa-clock"></i> Hora:</label>
+                    <input type="time" id="hora" required>
+                </div>
+
+                <div id="itens">
+                    <h3><i class="fas fa-list"></i> Itens</h3>
+                    <div class="item">
+                        <div class="form-group">
+                            <label><i class="fas fa-tag"></i> Produto:</label>
+                            <input type="text" class="produto" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-dollar-sign"></i> Preço Unitário:</label>
+                            <input type="number" step="0.01" class="preco" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-hashtag"></i> Quantidade:</label>
+                            <input type="number" class="quantidade" required>
+                        </div>
+                        <div class="form-group">
+                            <label><i class="fas fa-folder"></i> Categoria:</label>
+                            <select class="categoria" required>
+                                <option value="Hortifruti">Hortifruti</option>
+                                <option value="Bebidas">Bebidas</option>
+                                <option value="Mercearia">Mercearia</option>
+                                <option value="Açougue">Açougue</option>
+                                <option value="Padaria">Padaria</option>
+                                <option value="Laticínios">Laticínios</option>
+                                <option value="Limpeza">Limpeza</option>
+                                <option value="Higiene">Higiene</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <button type="button" onclick="addItem()"><i class="fas fa-plus"></i> Adicionar Item</button>
+                <button type="submit"><i class="fas fa-save"></i> Salvar Compra</button>
+            </form>
+        </section>
+
+        <section id="historico">
+            <h2><i class="fas fa-history"></i> Histórico de Compras</h2>
+            <ul id="historicoList">
+                <!-- Compras serão listadas aqui -->
+            </ul>
+        </section>
+
+        <section id="comparar">
+            <h2><i class="fas fa-chart-line"></i> Comparar Compras</h2>
+            <p>Selecione duas compras para comparar seus totais e variações.</p>
+            <div class="form-group">
+                <label>Compra 1:</label>
+                <select id="compra1">
+                    <option>Selecione uma compra</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Compra 2:</label>
+                <select id="compra2">
+                    <option>Selecione uma compra</option>
+                </select>
+            </div>
+            <button onclick="compararCompras()"><i class="fas fa-balance-scale"></i> Comparar</button>
+            <div id="resultadoComparacao"></div>
+        </section>
+
+        <section id="analisar">
+            <h2><i class="fas fa-chart-pie"></i> Analisar Consumo por Categoria</h2>
+            <p>Veja o top 3 categorias com maior gasto acumulado.</p>
+            <ul id="analiseList">
+                <!-- Análise será mostrada aqui -->
+            </ul>
+        </section>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2026 Smart Market - Controle suas compras com inteligência</p>
+    </footer>
+
+    <script>
+        function showSection(sectionId) {
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => section.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        function addItem() {
+            const itensDiv = document.getElementById('itens');
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'item';
+            itemDiv.innerHTML = `
+                <div class="form-group">
+                    <label><i class="fas fa-tag"></i> Produto:</label>
+                    <input type="text" class="produto" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-dollar-sign"></i> Preço Unitário:</label>
+                    <input type="number" step="0.01" class="preco" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-hashtag"></i> Quantidade:</label>
+                    <input type="number" class="quantidade" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-folder"></i> Categoria:</label>
+                    <select class="categoria" required>
+                        <option value="Hortifruti">Hortifruti</option>
+                        <option value="Bebidas">Bebidas</option>
+                        <option value="Mercearia">Mercearia</option>
+                        <option value="Açougue">Açougue</option>
+                        <option value="Padaria">Padaria</option>
+                        <option value="Laticínios">Laticínios</option>
+                        <option value="Limpeza">Limpeza</option>
+                        <option value="Higiene">Higiene</option>
+                    </select>
+                </div>
+            `;
+            itensDiv.appendChild(itemDiv);
+        }
+
+        document.getElementById('compraForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // Lógica para salvar a compra (simulada)
+            alert('Compra registrada com sucesso!');
+            this.reset();
+        });
+
+        // Simular carregamento de histórico e análises
+        window.onload = function() {
+            const historicoList = document.getElementById('historicoList');
+            historicoList.innerHTML = `
+                <li><span>Compra 1: Small Ville - 06/04/2026</span><span>R$ 85.83</span></li>
+                <!-- Adicionar mais compras conforme necessário -->
+            `;
+
+            const analiseList = document.getElementById('analiseList');
+            analiseList.innerHTML = `
+                <li><span>1º Bebidas</span><span>R$ 35.96</span></li>
+                <li><span>2º Açougue</span><span>R$ 21.99</span></li>
+                <li><span>3º Mercearia</span><span>R$ 16.99</span></li>
+            `;
+
+            // Simular opções para comparação
+            const compra1 = document.getElementById('compra1');
+            const compra2 = document.getElementById('compra2');
+            compra1.innerHTML += '<option value="1">Compra 1: Small Ville - R$ 85.83</option>';
+            compra2.innerHTML += '<option value="1">Compra 1: Small Ville - R$ 85.83</option>';
+        };
+
+        function compararCompras() {
+            const resultado = document.getElementById('resultadoComparacao');
+            resultado.innerHTML = '<p>Comparação: Diferença de R$ 0.00 (mesma compra selecionada)</p>';
+        }
+    </script>
+</body>
+</html>

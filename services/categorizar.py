@@ -2,6 +2,9 @@ import json
 import os
 import unicodedata
 import re
+from openai import OpenAI
+
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 CAMINHO_CATEGORIAS = 'data/categorias_produtos.json'
 
@@ -135,12 +138,31 @@ def categorizar_produto_com_IA(nome_produto):
         return "Outros"
 
 def chamar_ia(nome_produto):
-    """
-    Função para chamar IA (futuro: OpenAI).
-    Por enquanto, retorna 'Outros'.
-    """
-    # 🔹 SIMULAÇÃO - Futuro: integrar com OpenAI API
-    # Exemplo futuro:
-    # response = openai.ChatCompletion.create(...)
-    # return response.choices[0].message.content.strip()
-    return "Outros"
+    try:
+        prompt = f"""
+Classifique o produto abaixo em apenas UMA categoria da lista.
+
+Categorias válidas:
+{", ".join(CATEGORIAS_VALIDAS)}
+
+Produto:
+{nome_produto}
+
+Responda apenas com o nome exato de uma categoria da lista.
+Se não souber, responda apenas: Outros
+"""
+
+        resposta = client.responses.create(
+            model="gpt-4o-mini",
+            input=prompt
+        )
+
+        categoria = resposta.output_text.strip()
+
+        if categoria in CATEGORIAS_VALIDAS:
+            return categoria
+
+        return "Outros"
+
+    except Exception:
+        return "Outros"

@@ -80,6 +80,44 @@
         section.active {
             display: block;
         }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+            margin-top: 24px;
+        }
+        .dashboard-card {
+            background: linear-gradient(180deg, #ffffff 0%, #f5f7ff 100%);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 24px 48px rgba(99, 102, 241, 0.08);
+        }
+        .dashboard-card h3 {
+            margin: 0 0 12px;
+            font-size: 1rem;
+            letter-spacing: 0.08em;
+            color: #4b5563;
+            text-transform: uppercase;
+        }
+        .dashboard-card p {
+            margin: 0;
+            color: #0f172a;
+        }
+        .metric-value {
+            margin: 0;
+            font-size: 2.6rem;
+            font-weight: 700;
+            color: #111827;
+        }
+        .metric-label {
+            margin-top: 8px;
+            color: #6b7280;
+        }
+        .dashboard-chart {
+            width: 100%;
+            min-height: 300px;
+        }
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -174,6 +212,7 @@
             <button onclick="showSection('registrar')"><i class="fas fa-plus-circle"></i> Registrar Compra</button>
             <button onclick="showSection('historico')"><i class="fas fa-history"></i> Histórico</button>
             <button onclick="showSection('comparar')"><i class="fas fa-chart-line"></i> Comparar</button>
+            <button onclick="showSection('dashboard')"><i class="fas fa-tachometer-alt"></i> Dashboard</button>
             <button onclick="showSection('analisar')"><i class="fas fa-chart-pie"></i> Analisar</button>
         </nav>
 
@@ -213,21 +252,56 @@
                         <div class="form-group">
                             <label><i class="fas fa-folder"></i> Categoria:</label>
                             <select class="categoria" required>
-                                <option value="Hortifruti">Hortifruti</option>
-                                <option value="Bebidas">Bebidas</option>
-                                <option value="Mercearia">Mercearia</option>
-                                <option value="Açougue">Açougue</option>
-                                <option value="Padaria">Padaria</option>
-                                <option value="Laticínios">Laticínios</option>
-                                <option value="Limpeza">Limpeza</option>
-                                <option value="Higiene">Higiene</option>
+                                <option value="">Selecione uma categoria</option>
                             </select>
                         </div>
                     </div>
                 </div>
-                <button type="button" onclick="addItem()"><i class="fas fa-plus"></i> Adicionar Item</button>
+            </div>
+            <button type="button" onclick="addItem()"><i class="fas fa-plus"></i> Adicionar Item</button>
                 <button type="submit"><i class="fas fa-save"></i> Salvar Compra</button>
             </form>
+        </section>
+
+        <section id="dashboard">
+            <h2><i class="fas fa-tachometer-alt"></i> Painel de Controle</h2>
+            <p>Visão geral das compras, categorias e comparações em um painel interativo.</p>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Total de compras</h3>
+                    <p class="metric-value" id="totalCompras">0</p>
+                    <p class="metric-label">Compras registradas</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Gasto total</h3>
+                    <p class="metric-value" id="totalGasto">R$ 0,00</p>
+                    <p class="metric-label">Valor acumulado de todas as compras</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Média por compra</h3>
+                    <p class="metric-value" id="mediaTicket">R$ 0,00</p>
+                    <p class="metric-label">Gasto médio por compra</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Categoria em destaque</h3>
+                    <p class="metric-value" id="topCategoria">—</p>
+                    <p class="metric-label">Categoria com maior gasto</p>
+                </div>
+            </div>
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Gasto por categoria</h3>
+                    <canvas id="categoriaChart" class="dashboard-chart"></canvas>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Comparação de compras</h3>
+                    <canvas id="comparacaoChart" class="dashboard-chart"></canvas>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Participação por categoria</h3>
+                    <canvas id="participacaoChart" class="dashboard-chart"></canvas>
+                </div>
+            </div>
         </section>
 
         <section id="historico">
@@ -269,11 +343,265 @@
         <p>&copy; 2026 Smart Market - Controle suas compras com inteligência</p>
     </footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         function showSection(sectionId) {
             const sections = document.querySelectorAll('section');
             sections.forEach(section => section.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
+            if (sectionId === 'dashboard') {
+                renderDashboard();
+            }
+        }
+
+        let categoriaChartInstance = null;
+        let comparacaoChartInstance = null;
+        let participacaoChartInstance = null;
+
+        function formatCurrency(value) {
+            return value.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            });
+        }
+
+        function renderDashboard() {
+            const metricValues = {
+                totalCompras: 8,
+                totalGasto: 1342.75,
+                mediaTicket: 167.84,
+                topCategoria: 'Bebidas'
+            };
+
+            document.getElementById('totalCompras').textContent = metricValues.totalCompras;
+            document.getElementById('totalGasto').textContent = formatCurrency(metricValues.totalGasto);
+            document.getElementById('mediaTicket').textContent = formatCurrency(metricValues.mediaTicket);
+            document.getElementById('topCategoria').textContent = metricValues.topCategoria;
+
+            const categoriaData = {
+                labels: ['Bebidas', 'Hortifruti', 'Mercearia', 'Açougue', 'Padaria', 'Limpeza'],
+                values: [430.50, 280.20, 245.10, 175.95, 110.00, 100.00]
+            };
+
+            const comparacaoData = {
+                labels: ['Compra 1', 'Compra 2', 'Compra 3', 'Compra 4'],
+                values: [132.65, 145.20, 118.90, 164.00]
+            };
+
+            const participacaoData = {
+                labels: categoriaData.labels,
+                values: categoriaData.values
+            };
+
+            const categoriaCtx = document.getElementById('categoriaChart').getContext('2d');
+            const comparacaoCtx = document.getElementById('comparacaoChart').getContext('2d');
+            const participacaoCtx = document.getElementById('participacaoChart').getContext('2d');
+
+            if (categoriaChartInstance) categoriaChartInstance.destroy();
+            if (comparacaoChartInstance) comparacaoChartInstance.destroy();
+            if (participacaoChartInstance) participacaoChartInstance.destroy();
+
+            categoriaChartInstance = new Chart(categoriaCtx, {
+                type: 'bar',
+                data: {
+                    labels: categoriaData.labels,
+                    datasets: [{
+                        label: 'Gasto por categoria',
+                        data: categoriaData.values,
+                        backgroundColor: ['#6366f1', '#22c55e', '#f59e0b', '#ef4444', '#3b82f6', '#0ea5e9'],
+                        borderRadius: 12,
+                        maxBarThickness: 40
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { mode: 'index', intersect: false }
+                    },
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: { beginAtZero: true, ticks: { callback: value => formatCurrency(value) } }
+                    }
+                }
+            });
+
+            comparacaoChartInstance = new Chart(comparacaoCtx, {
+                type: 'line',
+                data: {
+                    labels: comparacaoData.labels,
+                    datasets: [{
+                        label: 'Valor da compra',
+                        data: comparacaoData.values,
+                        borderColor: '#14b8a6',
+                        backgroundColor: 'rgba(20, 184, 166, 0.15)',
+                        fill: true,
+                        tension: 0.35,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#14b8a6'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: { callbacks: { label: context => formatCurrency(context.parsed.y) } }
+                    },
+                    scales: {
+                        x: { grid: { color: 'rgba(148,163,184,0.15)' } },
+                        y: { beginAtZero: true, ticks: { callback: value => formatCurrency(value) } }
+                    }
+                }
+            });
+
+            participacaoChartInstance = new Chart(participacaoCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: participacaoData.labels,
+                    datasets: [{
+                        data: participacaoData.values,
+                        backgroundColor: ['#2563eb', '#16a34a', '#f97316', '#ef4444', '#8b5cf6', '#06b6d4']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: { callbacks: { label: context => `${context.label}: ${formatCurrency(context.parsed)}` } }
+                    }
+                }
+            });
+        }
+
+        const CATEGORIAS_VALIDAS = [
+            "Mercearia",
+            "Massas",
+            "Açougue",
+            "Frios e Laticinios",
+            "Padaria",
+            "Hortifruti",
+            "Congelados",
+            "Doces e Bolachas",
+            "Snacks",
+            "Bebidas",
+            "Temperos e Condimentos",
+            "Matinais",
+            "Limpeza",
+            "Higiene Pessoal",
+            "Bebe e Infantil",
+            "Pet",
+            "Descartaveis",
+            "Bazar",
+            "Automotivo",
+            "Casa e Cozinha",
+            "Eletronicos",
+            "Saudaveis e Naturais",
+            "Outros"
+        ];
+
+        const PALAVRAS_CHAVE = {
+            "Frios e Laticinios": ["leite", "queijo", "iogurte", "manteiga", "requeijao", "creme", "lacteo"],
+            "Açougue": ["carne", "frango", "peixe", "bife", "costela", "linguiça", "salsicha"],
+            "Mercearia": ["arroz", "feijao", "acucar", "açucar", "sal", "oleo", "farinha", "trigo", "milho"],
+            "Massas": ["macarrao", "massa", "espaguete", "penne", "talharim", "lasanha"],
+            "Hortifruti": ["alface", "tomate", "banana", "maça", "laranja", "uva", "batata", "cebola", "alho"],
+            "Padaria": ["pao", "bolo", "torta", "bisnaga", "croissant", "pao de forma"],
+            "Congelados": ["sorvete", "lasanha", "pizza", "hamburguer", "nugget", "batata frita"],
+            "Doces e Bolachas": ["chocolate", "biscoito", "doce", "bolacha", "bala", "caramelo"],
+            "Snacks": ["batata", "chips", "salgadinho", "pipoca", "amendoim"],
+            "Bebidas": ["refrigerante", "suco", "cerveja", "agua", "vinho", "whisky", "vodka", "coca", "cola", "pepsi", "fanta", "guarana"],
+            "Temperos e Condimentos": ["sal", "pimenta", "azeite", "vinagre", "mostarda", "ketchup", "molho"],
+            "Matinais": ["cereal", "granola", "aveia", "cafe", "cha"],
+            "Limpeza": ["sabao", "detergente", "desinfetante", "limpa", "esponja", "amaciante"],
+            "Higiene Pessoal": ["shampoo", "sabonete", "creme dental", "desodorante", "absorvente"],
+            "Bebe e Infantil": ["fralda", "papinha", "leite em po", "chupeta", "mamadeira"],
+            "Pet": ["racao", "areia", "brinquedo pet", "coleira"],
+            "Descartaveis": ["guardanapo", "prato descartavel", "copos descartaveis", "papel toalha"],
+            "Casa e Cozinha": ["panela", "utensilio", "eletrodomestico", "prato", "copo"],
+            "Automotivo": ["ferramenta", "acessorio automotivo", "oleo motor"],
+            "Eletronicos": ["lampada", "carregador", "fone de ouvido", "bateria"],
+            "Saudaveis e Naturais": ["natural", "integral", "organico", "sem gluten", "vegano"]
+        };
+
+        let categoriaOptionsHTML = `<option value="">Selecione uma categoria</option>${CATEGORIAS_VALIDAS.map(categoria => `<option value="${categoria}">${categoria}</option>`).join('')}`;
+
+        function getCategoriaOptionsHTML() {
+            return categoriaOptionsHTML;
+        }
+
+        function setCategoriaSelects() {
+            const selects = document.querySelectorAll('select.categoria');
+            selects.forEach(select => {
+                const previousValue = select.value;
+                select.innerHTML = getCategoriaOptionsHTML();
+                if (previousValue && CATEGORIAS_VALIDAS.includes(previousValue)) {
+                    select.value = previousValue;
+                }
+            });
+        }
+
+
+
+        function normalizarTexto(texto) {
+            if (!texto) return "";
+            return texto
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .toLowerCase()
+                .replace(/\s+/g, ' ')
+                .trim();
+        }
+
+        function obterCategoriaPorPalavraChave(nomeProduto) {
+            const produto = normalizarTexto(nomeProduto);
+            if (!produto) return "";
+
+            for (const categoria of CATEGORIAS_VALIDAS) {
+                const nomeCategoriaNormalizado = normalizarTexto(categoria);
+                if (nomeCategoriaNormalizado && produto.includes(nomeCategoriaNormalizado)) {
+                    return categoria;
+                }
+            }
+
+            for (const [categoria, palavras] of Object.entries(PALAVRAS_CHAVE)) {
+                for (const palavra of palavras) {
+                    const palavraNormalizada = normalizarTexto(palavra);
+                    if (palavraNormalizada && produto.includes(palavraNormalizada)) {
+                        return categoria;
+                    }
+                }
+            }
+
+            return "Outros";
+        }
+
+        function atualizarCategoriaDoItem(itemDiv) {
+            const produtoInput = itemDiv.querySelector('input.produto');
+            const categoriaSelect = itemDiv.querySelector('select.categoria');
+            if (!produtoInput || !categoriaSelect) return;
+
+            const produto = produtoInput.value;
+            if (!produto.trim()) {
+                categoriaSelect.value = "";
+                return;
+            }
+
+            const categoriaDetectada = obterCategoriaPorPalavraChave(produto);
+            categoriaSelect.value = CATEGORIAS_VALIDAS.includes(categoriaDetectada)
+                ? categoriaDetectada
+                : 'Outros';
+        }
+
+        function attachCategoriaListener(itemDiv) {
+            const produtoInput = itemDiv.querySelector('input.produto');
+            if (!produtoInput) return;
+            produtoInput.addEventListener('input', () => atualizarCategoriaDoItem(itemDiv));
+            produtoInput.addEventListener('blur', () => atualizarCategoriaDoItem(itemDiv));
+        }
+
+        function loadCategoriaOptions() {
+            setCategoriaSelects();
+            document.querySelectorAll('#itens .item').forEach(attachCategoriaListener);
         }
 
         function addItem() {
@@ -296,18 +624,12 @@
                 <div class="form-group">
                     <label><i class="fas fa-folder"></i> Categoria:</label>
                     <select class="categoria" required>
-                        <option value="Hortifruti">Hortifruti</option>
-                        <option value="Bebidas">Bebidas</option>
-                        <option value="Mercearia">Mercearia</option>
-                        <option value="Açougue">Açougue</option>
-                        <option value="Padaria">Padaria</option>
-                        <option value="Laticínios">Laticínios</option>
-                        <option value="Limpeza">Limpeza</option>
-                        <option value="Higiene">Higiene</option>
+                        ${getCategoriaOptionsHTML()}
                     </select>
                 </div>
             `;
             itensDiv.appendChild(itemDiv);
+            attachCategoriaListener(itemDiv);
         }
 
         document.getElementById('compraForm').addEventListener('submit', function(e) {
@@ -319,6 +641,8 @@
 
         // Simular carregamento de histórico e análises
         window.onload = function() {
+            loadCategoriaOptions();
+            renderDashboard();
             const historicoList = document.getElementById('historicoList');
             historicoList.innerHTML = `
                 <li><span>Compra 1: Small Ville - 06/04/2026</span><span>R$ 85.83</span></li>

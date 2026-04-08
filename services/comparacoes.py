@@ -1,9 +1,17 @@
-#Compara:
-    #preço entre os meses
-    #aumento e queda
-    #quantidade comprada
+# ==========================================
+# 📦 ARQUIVO: comparacoes.py
+# 🎯 RESPONSABILIDADE:
+# Analisar diferenças entre compras históricas
+# Identificar variações de preço, novos/removidos produtos
+# ==========================================
 
+# ==========================================
+# 📊 ANÁLISE COMPARATIVA
+# ==========================================
 
+# 🔹 Função: comparar_compras
+# 📌 Objetivo:
+# Comparar duas compras e identificar diferenças detalhadas
 def comparar_compras(compra_atual, compra_anterior):
     aumentaram = []
     diminuiram = []
@@ -72,6 +80,9 @@ def comparar_compras(compra_atual, compra_anterior):
     }
 
 
+# 🔹 Função: exibir_relatorio_comparacao
+# 📌 Objetivo:
+# Exibir relatório formatado das diferenças encontradas
 def exibir_relatorio_comparacao(resultado):
     print("\n--- Relatório de Comparação ---")
 

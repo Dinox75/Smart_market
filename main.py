@@ -1,5 +1,9 @@
-# Ponto de entrada do projeto.
-# Daqui que tudo começa.
+# ==========================================
+# 📦 ARQUIVO: main.py
+# 🎯 RESPONSABILIDADE:
+# Ponto de entrada principal do sistema Smart Market
+# Coordena o fluxo da aplicação, menu e integração de módulos
+# ==========================================
 
 from models.compra import Compra
 from models.item import Item
@@ -15,7 +19,14 @@ from services.historico import carregar_compras, salvar_compra
 from services.comparacoes import comparar_compras, exibir_relatorio_comparacao
 from services.categorizar import obter_categoria_produto
 
+# ==========================================
+# 🎯 CORE - FLUXO PRINCIPAL
+# ==========================================
 
+# 🔹 Função: criar_compra
+# 📌 Objetivo:
+# Coletar dados do usuário para criar uma nova compra
+# Integra validações, categorização automática e criação de itens
 def criar_compra():
     mercado = validar_mercado()
     data_agora = validar_data()
@@ -43,6 +54,10 @@ def criar_compra():
     return compra
 
 
+# 🔹 Função: mostrar_resumo
+# 📌 Objetivo:
+# Exibir resumo detalhado de uma compra recém-criada
+# Mostra dados gerais e totais calculados
 def mostrar_resumo(compra):
     print("\n--- Resumo da compra ---")
     print(f"Mercado: {compra.mercado}")
@@ -52,6 +67,10 @@ def mostrar_resumo(compra):
     print(f"Total da compra: R$ {compra.total_compra:.2f}")
 
 
+# 🔹 Função: mostrar_menu
+# 📌 Objetivo:
+# Exibir menu principal e capturar opção do usuário
+# Centraliza navegação da aplicação
 def mostrar_menu():
     print("\n--- SMART MARKET ---")
     print("1 - Registrar nova compra")
@@ -64,6 +83,10 @@ def mostrar_menu():
     return opcao
 
 
+# 🔹 Função: mostrar_historico
+# 📌 Objetivo:
+# Exibir histórico completo de compras salvas
+# Permite visualização detalhada de itens por compra
 def mostrar_historico():
     historico = carregar_compras()
 
@@ -95,6 +118,10 @@ def mostrar_historico():
                 )
 
 
+# 🔹 Função: comparar_ultimas_compras
+# 📌 Objetivo:
+# Comparar automaticamente as duas últimas compras registradas
+# Facilita análise de tendências recentes
 def comparar_ultimas_compras():
     historico = carregar_compras()
 
@@ -119,6 +146,10 @@ def comparar_ultimas_compras():
     exibir_relatorio_comparacao(resultado)
 
 
+# 🔹 Função: comparar_compras_escolhidas
+# 📌 Objetivo:
+# Permitir seleção manual de duas compras para comparação
+# Oferece flexibilidade na análise histórica
 def comparar_compras_escolhidas():
     historico = carregar_compras()
 
@@ -176,6 +207,10 @@ def comparar_compras_escolhidas():
     exibir_relatorio_comparacao(resultado)
 
 
+# 🔹 Função: analisar_consumo_por_categoria
+# 📌 Objetivo:
+# Analisar e exibir top 3 categorias com maior gasto acumulado
+# Ajuda a identificar padrões de consumo
 def analisar_consumo_por_categoria():
     historico = carregar_compras()
 
@@ -216,6 +251,10 @@ def analisar_consumo_por_categoria():
         )
 
 
+# 🔹 Função: main
+# 📌 Objetivo:
+# Loop principal da aplicação, gerencia menu e fluxo
+# Coordena todas as funcionalidades do sistema
 def main():
     while True:
         opcao = mostrar_menu()

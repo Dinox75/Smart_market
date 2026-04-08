@@ -1,10 +1,19 @@
-#Validar:
-    #nome vazio
-    #preço inválido
-    #quantidade inválida
+# ==========================================
+# 📦 ARQUIVO: validacoes.py
+# 🎯 RESPONSABILIDADE:
+# Funções utilitárias para validação de entrada do usuário
+# Garante integridade dos dados antes de processar
+# ==========================================
 
 from datetime import datetime
 
+# ==========================================
+# ✅ VALIDAÇÃO DE ENTRADA
+# ==========================================
+
+# 🔹 Função: validar_produto
+# 📌 Objetivo:
+# Validar nome do produto, garantindo não vazio e formatado
 def validar_produto():
     while True:
         produto = input("Item a adicionar: ").strip()
@@ -17,6 +26,9 @@ def validar_produto():
         return produto
 
 
+# 🔹 Função: validar_quantidade
+# 📌 Objetivo:
+# Validar quantidade como número inteiro positivo
 def validar_quantidade():
     while True:
         try:
@@ -32,6 +44,9 @@ def validar_quantidade():
             print("Inserir somente números válidos")
 
 
+# 🔹 Função: validar_preco
+# 📌 Objetivo:
+# Validar preço como número positivo, aceitando vírgula ou ponto
 def validar_preco():
     while True:
         try:
@@ -49,6 +64,9 @@ def validar_preco():
             print("Inserir um preço válido")
 
 
+# 🔹 Função: validar_mercado
+# 📌 Objetivo:
+# Validar nome do mercado, garantindo não vazio e formatado
 def validar_mercado():
     while True:
             mercado = input("Digite o mercado: ").strip()
@@ -59,6 +77,10 @@ def validar_mercado():
 
             return mercado.title()
 
+
+# 🔹 Função: validar_data
+# 📌 Objetivo:
+# Validar data no formato dd/mm/aaaa e evitar entradas inválidas
 def validar_data():
     while True:
         data = input("Data da compra (dd/mm/aaaa):").strip()
@@ -74,6 +96,9 @@ def validar_data():
             print("Digite uma data valida no formato dd/mm/aaaa")
 
 
+# 🔹 Função: validar_hora
+# 📌 Objetivo:
+# Validar hora no formato hh:mm e garantir dados consistentes
 def validar_hora():
     while True:
         hora = input("Insira a hora da compra: ").strip()

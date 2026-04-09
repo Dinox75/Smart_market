@@ -1,3 +1,53 @@
 [
-    
+    {
+        "mercado": "Carrefour",
+        "data": "09/04/2026",
+        "hora": "13:41",
+        "total_compra": 106.35000000000001,
+        "total_itens": 14,
+        "itens": [
+            {
+                "produto": "Vinagre De Maça",
+                "preco_unitario": 14.3,
+                "quantidade": 1,
+                "categoria": "Hortifruti",
+                "total_item": 14.3
+            },
+            {
+                "produto": "Paprica Defumada 250G",
+                "preco_unitario": 5.99,
+                "quantidade": 1,
+                "categoria": "Outros",
+                "total_item": 5.99
+            },
+            {
+                "produto": "Leite Longa Vida 1Lt",
+                "preco_unitario": 5.99,
+                "quantidade": 5,
+                "categoria": "Frios e Laticinios",
+                "total_item": 29.950000000000003
+            },
+            {
+                "produto": "Caixa De Bombom Lacta",
+                "preco_unitario": 10.99,
+                "quantidade": 1,
+                "categoria": "Outros",
+                "total_item": 10.99
+            },
+            {
+                "produto": "Biscoito De Polvilho Fazenda",
+                "preco_unitario": 6.78,
+                "quantidade": 2,
+                "categoria": "Doces e Bolachas",
+                "total_item": 13.56
+            },
+            {
+                "produto": "Guarana Antartica 2Lt",
+                "preco_unitario": 7.89,
+                "quantidade": 4,
+                "categoria": "Bebidas",
+                "total_item": 31.56
+            }
+        ]
+    }
 ]

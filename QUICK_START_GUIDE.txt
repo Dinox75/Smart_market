@@ -1,0 +1,274 @@
+╔════════════════════════════════════════════════════════════════════════════╗
+║                      GUIA RÁPIDO - SMART MARKET v1.0                      ║
+║                    Controle Inteligente de Compras de Supermercado        ║
+╚════════════════════════════════════════════════════════════════════════════╝
+
+🌐 COMO ACESSAR A APLICAÇÃO
+═══════════════════════════════════════════════════════════════════════════
+
+1. Terminal > python app.py
+   ↓
+2. Espere mensagem: "Running on http://127.0.0.1:5000"
+   ↓
+3. Navegador > http://localhost:5000
+   ↓
+4. 🎉 Interface carrega com todas as funcionalidades
+
+═══════════════════════════════════════════════════════════════════════════
+
+📊 NAVEGAÇÃO ENTRE SEÇÕES
+═══════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────┐
+│  [📊]     [➕]      [📋]      [⚖️ ]    [📈]    [ℹ️ ]          │
+│ DASHBOARD REGISTRAR HISTÓRICO COMPARAR ANÁLISE SOBRE       │
+└─────────────────────────────────────────────────────────────┘
+
+Clique em qualquer abinha para navegar entre as seções.
+
+═══════════════════════════════════════════════════════════════════════════
+
+📊 DASHBOARD (Aba Inicial)
+═══════════════════════════════════════════════════════════════════════════
+
+VISUALIZAÇÃO:
+┌─────────────────────────────────────────────────────────────┐
+│  💰 Total Gasto    📦 Total Itens    🏪 Nº Compras    ⌛ Média │
+│  R$ XXXX.XX        XXX               XX              XX.XX  │
+└─────────────────────────────────────────────────────────────┘
+
+GRÁFICOS:
+ 1️⃣  Gasto por Categoria (Topo 10)
+ 2️⃣  Evolução de Compras ao Longo da História
+ 3️⃣  Distribuição de Gasto Entre Categorias
+
+✨ Os gráficos atualizam automaticamente a cada 5 segundos!
+
+═══════════════════════════════════════════════════════════════════════════
+
+➕ REGISTRAR COMPRA
+═══════════════════════════════════════════════════════════════════════════
+
+PASSO 1: Preencher Informações Básicas
+┌─────────────────────────────────────────────────────────────┐
+│ Mercado: _________________ (ex: Carrefour, Pão de Açúcar)  │
+│ Data:    [Hoje é preenchido automaticamente]               │
+│ Hora:    _________________ (ex: 14:30)                     │
+└─────────────────────────────────────────────────────────────┘
+
+PASSO 2: Adicionar Itens
+┌─────────────────────────────────────────────────────────────┐
+│ Item 1:                                                     │
+│   Produto: _________________ (ex: Leite integral 1L)       │
+│   Categoria: [AUTOMÁTICA] ▼                                 │
+│   Valor: R$ _________________                              │
+│   [Remover]                                                 │
+│                                                             │
+│ [+ Adicionar Novo Item]                                     │
+└─────────────────────────────────────────────────────────────┘
+
+PASSO 3: Salvar
+┌─────────────────────────────────────────────────────────────┐
+│  [Salvar Compra]                                            │
+│  ✓ Notificação: "Compra registrada com sucesso!"          │
+└─────────────────────────────────────────────────────────────┘
+
+🤖 DETECÇÃO AUTOMÁTICA:
+   • Digita "Leite" → Categoria: Frios e Laticínios
+   • Digita "Arroz" → Categoria: Mercearia
+   • Digita "Frango" → Categoria: Açougue
+   • Pode editar manualmente se necessário
+
+═══════════════════════════════════════════════════════════════════════════
+
+📋 HISTÓRICO
+═══════════════════════════════════════════════════════════════════════════
+
+VISUALIZAÇÃO:
+Cada compra aparece em um card com:
+
+┌─────────────────────────────────────────────────────────────┐
+│ 🏪 CARREFOUR                                                │
+│ 📅 15/01/2026  ⏰ 14:30                                      │
+│ 💰 R$ 250.50                                                │
+│                                                             │
+│ Itens:                                                      │
+│  • Leite - R$ 5.90 (Frios e Laticínios)                    │
+│  • Arroz - R$ 30.00 (Mercearia)                            │
+│  • Frango - R$ 45.50 (Açougue)                             │
+└─────────────────────────────────────────────────────────────┘
+
+✨ Clique no card para expandir/fechar detalhes
+
+═══════════════════════════════════════════════════════════════════════════
+
+⚖️  COMPARAR COMPRAS
+═══════════════════════════════════════════════════════════════════════════
+
+COMO USAR:
+1. Selecione 2 compras diferentes no dropdown
+2. CliquE em "Comparar"
+3. Sistema mostra:
+
+┌─────────────────────────────────────────────────────────────┐
+│                    COMPRA 1        COMPRA 2        DIFERENÇA│
+│ Total:           R$ 250.50 →   R$ 300.00 →    ↑ +19.8%    │
+│ Nº Itens:            15 →           20 →        ↑ +33.3%   │
+│ Ticket Médio:  R$ 16.70 →     R$ 15.00 →      ↓ -10.2%    │
+└─────────────────────────────────────────────────────────────┘
+
+🎯 Útil para: Comparar compras diferentes, ver tendências
+
+═══════════════════════════════════════════════════════════════════════════
+
+📈 ANÁLISE
+═══════════════════════════════════════════════════════════════════════════
+
+MOSTRA:
+├─ Nº Total de Compras
+├─ Gasto Total
+├─ Top 10 Categorias com:
+│  ├─ Ranking (1º, 2º, 3º...)
+│  ├─ Nome da categoria
+│  ├─ Valor total gasto
+│  ├─ Percentual do total
+│  └─ Barra de progresso visual
+
+EXEMPLO:
+┌─────────────────────────────────────────────────────────────┐
+│ 1º. Mercearia        R$ 150.00  (42.8%)  ██████████░░░░    │
+│ 2º. Açougue          R$ 100.00  (28.6%)  ███████░░░░░░░░    │
+│ 3º. Frios/Laticínios R$ 70.00   (20.0%)  █████░░░░░░░░░░    │
+│ 4º. Doces            R$ 25.00   (7.1%)   ██░░░░░░░░░░░░░░  │
+│ 5º. Bebidas          R$ 10.00   (2.8%)   ░░░░░░░░░░░░░░░░  │
+└─────────────────────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════════════════════════
+
+ℹ️  SOBRE O PROJETO
+═══════════════════════════════════════════════════════════════════════════
+
+Seção educacional que contém:
+
+✓ Apresentação visual do projeto
+✓ 6 Funcionalidades principais explicadas
+✓ Stack tecnológico utilizado
+✓ Timeline interativa do fluxo de dados
+✓ Instruções passo-a-passo de uso
+✓ Dicas práticas
+✓ Informações de suporte
+✓ Créditos
+
+═══════════════════════════════════════════════════════════════════════════
+
+💡 DICAS & TRUQUES
+═══════════════════════════════════════════════════════════════════════════
+
+1️⃣  SINCRONIZAÇÃO AUTOMÁTICA
+    ↳ Dashboard atualiza sozinho a cada 5 segundos
+    ↳ Não precisa fazer refresh F5
+    ↳ Abra 2 abas para ver sincronismo em tempo real
+
+2️⃣  CATEGORIA AUTOMÁTICA
+    ↳ Digite "Leite" e categoria preenche como "Frios"
+    ↳ Funciona com 23 diferentes categorias
+    ↳ Pode editar manualmente se discordar
+
+3️⃣  CAMPOS PRÉ-PREENCHIDOS
+    ↳ Data já vem com hoje
+    ↳ Faça apenas fill-in do necessário
+
+4️⃣  ADICIONAR MÚLTIPLOS ITENS
+    ↳ Click [+ Adicionar Novo Item] quantas vezes quiser
+    ↳ Remova com [Remover] se cometeu erro
+    ↳ Salve tudo de uma vez
+
+5️⃣  VISUALIZAR DETALHES
+    ↳ Click na compra no Histórico para expandir
+    ↳ Click novamente para fechar
+
+═══════════════════════════════════════════════════════════════════════════
+
+⚠️  TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════════════
+
+❌ "Erro ao conectar com servidor"
+   ✓ Certifique-se que Flask está rodando (python app.py)
+   ✓ Verifique se está em http://localhost:5000
+   ✓ Abra console (F12) e procure por erro específico
+
+❌ "Dados não atualizam"
+   ✓ Dê F5 para refresh manual
+   ✓ Abra o DevTools (F12) e veja console para erros
+   ✓ Certifique-se que o arquivo data/compras.json existe
+
+❌ "Gráficos não aparecem"
+   ✓ Atualize a página (F12 + Cmd+Shift+R hard refresh)
+   ✓ Verifique se tem dados no Dashboard
+   ✓ Tente adicionar uma compra de teste
+
+❌ "Form não funciona"
+   ✓ Verifique se todos os campos obrigatórios estão preenchidos
+   ✓ Procure mensagem de erro em vermelho
+   ✓ Tente novamente após alguns segundos
+
+═══════════════════════════════════════════════════════════════════════════
+
+🎨 PERSONALIZAÇÕES POSSÍVEIS
+═══════════════════════════════════════════════════════════════════════════
+
+Quer mudar cores? Edite em index.html:
+  :root {
+    --primary: #10b981;        ← Mudaria cor verde
+    --secondary: #3b82f6;      ← Mudaria cor azul
+    --accent: #f59e0b;         ← Mudaria cor laranja
+  }
+
+Quer mudar sync interval? Edite em index.html:
+  const SYNC_INTERVAL = 5000;  ← 5000 = 5 segundos
+                               ← Mude para qualquer valor em ms
+
+═══════════════════════════════════════════════════════════════════════════
+
+📞 INFORMAÇÕES TÉCNICAS
+═══════════════════════════════════════════════════════════════════════════
+
+AMBIENTE:
+├─ Python 3.8+
+├─ Flask 2.3.3
+├─ Flask-CORS 4.0.0
+└─ ModernBrowser (Chrome, Firefox, Safari, Edge)
+
+DADOS:
+├─ Armazenamento: data/compras.json
+├─ Formato: JSON
+├─ Persistência: No disco local
+└─ Sincronização: 5 segundos
+
+APLICAÇÃO:
+├─ Arquitetura: Frontend SPA + Backend REST
+├─ Responsividade: Mobile-first
+├─ Performance: Otimizada para conexão normal
+└─ Compatibilidade: Windows, Mac, Linux
+
+═══════════════════════════════════════════════════════════════════════════
+
+🎯 PRÓXIMOS PASSOS RECOMENDADOS
+═══════════════════════════════════════════════════════════════════════════
+
+1. Registre algumas compras de teste
+2. Observe os gráficos atualizarem em tempo real
+3. Explore todas as 6 seções
+4. Teste a sincronização em 2 abas diferentes
+5. Leia a seção "SOBRE" para entender a arquitetura
+
+═══════════════════════════════════════════════════════════════════════════
+
+✨ BEM-VINDO AO SMART MARKET! ✨
+
+Aplicação totalmente refatorada, profissional e pronta para uso.
+Desenvolvido com cuidado para melhor experiência do usuário.
+
+Aproveite! 🚀
+
+═══════════════════════════════════════════════════════════════════════════

@@ -49,5 +49,21 @@
                 "total_item": 31.56
             }
         ]
+    },
+    {
+        "mercado": "Carrefour",
+        "data": "09/04/2026",
+        "hora": "13:30",
+        "total_compra": 35.96,
+        "total_itens": 4,
+        "itens": [
+            {
+                "produto": "Coco Cola 2Lt",
+                "preco_unitario": 8.99,
+                "quantidade": 4,
+                "categoria": "Bebidas",
+                "total_item": 35.96
+            }
+        ]
     }
 ]

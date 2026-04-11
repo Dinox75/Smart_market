@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Smart Market - Controle Inteligente de Compras</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Smart Market</span>
+            </div>
+            <div class="status-sync">
+                <span class="dot"></span>
+                <span>Sincronizando em tempo real</span>
+            </div>
+        </div>
+
+        <nav>
+            <button class="nav-button active" onclick="showSection('dashboard', this)">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </button>
+            <button class="nav-button" onclick="showSection('registrar', this)">
+                <i class="fas fa-plus-circle"></i> Registrar
+            </button>
+            <button class="nav-button" onclick="showSection('historico', this)">
+                <i class="fas fa-history"></i> Histórico
+            </button>
+            <button class="nav-button" onclick="showSection('comparar', this)">
+                <i class="fas fa-chart-line"></i> Comparar
+            </button>
+            <button class="nav-button" onclick="showSection('analisar', this)">
+                <i class="fas fa-chart-pie"></i> Análise
+            </button>
+            <button class="nav-button" onclick="showSection('sobre', this)">
+                <i class="fas fa-info-circle"></i> Sobre
+            </button>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section id="dashboard" class="active">
+            <h2><i class="fas fa-tachometer-alt"></i> Dashboard</h2>
+
+            <div class="dashboard-grid">
+                <div class="dashboard-card">
+                    <h3>Total de Compras</h3>
+                    <p class="metric-value" id="totalCompras">0</p>
+                    <p class="metric-label">Compras registradas</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Gasto Total</h3>
+                    <p class="metric-value" id="totalGasto">R$ 0,00</p>
+                    <p class="metric-label">Valor acumulado</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Média por Compra</h3>
+                    <p class="metric-value" id="mediaTicket">R$ 0,00</p>
+                    <p class="metric-label">Ticket médio</p>
+                </div>
+                <div class="dashboard-card">
+                    <h3>Categoria Destaque</h3>
+                    <p class="metric-value" id="topCategoria">—</p>
+                    <p class="metric-label">Maior gasto</p>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>Gasto por Categoria</h3>
+                    <div class="chart-container">
+                        <canvas id="categoriaChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Evolução de Compras</h3>
+                    <div class="chart-container">
+                        <canvas id="comparacaoChart"></canvas>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Distribuição por Categoria</h3>
+                    <div class="chart-container">
+                        <canvas id="participacaoChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="registrar">
+            <h2><i class="fas fa-receipt"></i> Registrar Nova Compra</h2>
+
+            <form id="compraForm">
+                <div class="form-group-row">
+                    <div class="form-group">
+                        <label for="mercado"><i class="fas fa-store"></i> Mercado</label>
+                        <input type="text" id="mercado" placeholder="Ex: Carrefour, Pão de Açúcar..." required />
+                    </div>
+                    <div class="form-group">
+                        <label for="data"><i class="fas fa-calendar-alt"></i> Data</label>
+                        <input type="date" id="data" required />
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="hora"><i class="fas fa-clock"></i> Hora</label>
+                    <input type="time" id="hora" required />
+                </div>
+
+                <div class="items-container">
+                    <h3><i class="fas fa-list"></i> Itens da Compra</h3>
+                    <div id="itens"></div>
+                </div>
+
+                <div class="form-group">
+                    <button type="button" class="btn-secondary" onclick="addItem()">
+                        <i class="fas fa-plus"></i> Adicionar Item
+                    </button>
+                </div>
+
+                <button type="submit" class="btn-primary">
+                    <i class="fas fa-save"></i> Salvar Compra
+                </button>
+            </form>
+        </section>
+
+        <section id="historico">
+            <h2><i class="fas fa-history"></i> Histórico de Compras</h2>
+            <div id="historicoContainer">
+                <div class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p>Nenhuma compra registrada ainda</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="comparar">
+            <h2><i class="fas fa-chart-line"></i> Comparar Compras</h2>
+            <p>Selecione duas compras para comparar seus totais e variações.</p>
+
+            <div class="form-group-row">
+                <div class="form-group">
+                    <label for="compra1"><i class="fas fa-receipt"></i> Primeira Compra</label>
+                    <select id="compra1">
+                        <option value="">Selecione uma compra</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="compra2"><i class="fas fa-receipt"></i> Segunda Compra</label>
+                    <select id="compra2">
+                        <option value="">Selecione uma compra</option>
+                    </select>
+                </div>
+            </div>
+
+            <button onclick="compararCompras()" class="btn-primary">
+                <i class="fas fa-balance-scale"></i> Comparar
+            </button>
+
+            <div id="resultadoComparacao" style="margin-top: 2rem;"></div>
+        </section>
+
+        <section id="analisar">
+            <h2><i class="fas fa-chart-pie"></i> Análise de Consumo</h2>
+            <p>Visualize as categorias com maior gasto acumulado.</p>
+
+            <div id="analiseContainer">
+                <div class="empty-state">
+                    <i class="fas fa-chart-pie"></i>
+                    <p>Sem dados para análise</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="sobre">
+            <div class="about-hero">
+                <h1><i class="fas fa-rocket"></i> Smart Market</h1>
+                <p>Controle inteligente e profissional das suas compras de supermercado com sincronização em tempo real</p>
+            </div>
+
+            <h2 style="border-top: 2px solid var(--light); padding-top: 2rem;">
+                <i class="fas fa-lightbulb"></i> O Projeto
+            </h2>
+            <p>
+                Smart Market é uma aplicação web moderna desenvolvida para ajudar você a gerenciar suas compras de supermercado
+                de forma inteligente e eficiente. A plataforma oferece ferramentas poderosas para registrar, analisar e comparar compras,
+                ajudando você a entender seus padrões de gasto.
+            </p>
+
+            <h2 style="margin-top: 2rem;"><i class="fas fa-star"></i> Funcionalidades Principais</h2>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-receipt"></i></div>
+                    <h3>Registrar Compras</h3>
+                    <p>Registre todas as suas compras com detalhes de mercado, data, hora e itens</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-tachometer-alt"></i></div>
+                    <h3>Dashboard Interativo</h3>
+                    <p>Visualize estatísticas em tempo real sobre seus gastos</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-history"></i></div>
+                    <h3>Histórico Completo</h3>
+                    <p>Acesse todo o histórico de compras e navegue pelos detalhes</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-balance-scale"></i></div>
+                    <h3>Comparar Compras</h3>
+                    <p>Compare duas compras para entender variações de preço</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-chart-pie"></i></div>
+                    <h3>Análise de Categorias</h3>
+                    <p>Identifique em quais categorias você gasta mais</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-sync"></i></div>
+                    <h3>Sincronização em Tempo Real</h3>
+                    <p>Dados atualizados instantaneamente quando mudanças são feitas</p>
+                </div>
+            </div>
+
+            <h2 style="margin-top: 2rem;"><i class="fas fa-cogs"></i> Tecnologias Utilizadas</h2>
+
+            <div class="tech-stack">
+                <div class="tech-badge"><strong>Frontend</strong><small>HTML5, CSS3, JS</small></div>
+                <div class="tech-badge"><strong>Backend</strong><small>Flask, Python 3</small></div>
+                <div class="tech-badge"><strong>Banco de Dados</strong><small>JSON local</small></div>
+                <div class="tech-badge"><strong>Gráficos</strong><small>Chart.js</small></div>
+                <div class="tech-badge"><strong>Ícones</strong><small>Font Awesome 6</small></div>
+                <div class="tech-badge"><strong>API</strong><small>REST com CORS</small></div>
+            </div>
+
+            <h2 style="margin-top: 2rem;"><i class="fas fa-map"></i> Fluxo da Aplicação</h2>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-dot"><i class="fas fa-mouse"></i></div>
+                    <div class="timeline-content">
+                        <h3>1. Registrar Compra</h3>
+                        <p>Você acessa a seção "Registrar" e preenche os detalhes: mercado, data, hora e itens</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"><i class="fas fa-server"></i></div>
+                    <div class="timeline-content">
+                        <h3>2. Enviar para Servidor</h3>
+                        <p>Os dados são enviados via API REST para o servidor Flask, que valida e categoriza os produtos</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"><i class="fas fa-database"></i></div>
+                    <div class="timeline-content">
+                        <h3>3. Armazenamento</h3>
+                        <p>A compra é salva em um arquivo JSON no servidor</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"><i class="fas fa-sync"></i></div>
+                    <div class="timeline-content">
+                        <h3>4. Sincronização em Tempo Real</h3>
+                        <p>O frontend busca automaticamente os dados atualizados a cada 5 segundos</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-dot"><i class="fas fa-chart-bar"></i></div>
+                    <div class="timeline-content">
+                        <h3>5. Visualização de Dados</h3>
+                        <p>Você pode visualizar o dashboard, histórico e análises com gráficos atualizados</p>
+                    </div>
+                </div>
+            </div>
+
+            <h2 style="margin-top: 2rem;"><i class="fas fa-hand-holding-heart"></i> Como Usar</h2>
+
+            <div class="card">
+                <h3>Começando</h3>
+                <ol style="margin: 1rem 0; padding-left: 2rem;">
+                    <li>Clique em <strong>"Registrar"</strong> para adicionar sua primeira compra</li>
+                    <li>Preencha o mercado, data e hora da compra</li>
+                    <li>Adicione os itens com produto, preço unitário e quantidade</li>
+                    <li>A categoria é detectada automaticamente</li>
+                    <li>Clique em <strong>"Salvar Compra"</strong></li>
+                    <li>Visualize seus dados no <strong>Dashboard</strong></li>
+                </ol>
+            </div>
+
+            <div style="background: var(--light); padding: 2rem; border-radius: 12px; margin-top: 2rem; text-align: center;">
+                <p style="margin: 0;">
+                    <strong>Smart Market v1.0</strong> - Desenvolvido com
+                    <i class="fas fa-heart" style="color: var(--danger);"></i>
+                    para melhorar sua gestão financeira
+                </p>
+                <p style="margin: 0.5rem 0 0 0; color: var(--gray); font-size: 0.9rem;">
+                    © 2026 - Controle suas compras com inteligência
+                </p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p><strong>Smart Market</strong> - Controle inteligente de compras com sincronização em tempo real</p>
+        <p>© 2026 | Desenvolvido com Python + Flask + JavaScript</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

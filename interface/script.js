@@ -234,8 +234,8 @@ document.getElementById("compraForm")?.addEventListener("submit", async (e) => {
     const itens = Array.from(itensElements).map(item => ({
         produto: item.querySelector(".produto").value,
         preco_unitario: parseFloat(item.querySelector(".preco").value),
-        quantidade: parseFloat(item.querySelector(".quantidade").value),
-        categoria: item.querySelector(".categoria").value || obterCategoriaPorPalavraChave(item.querySelector(".produto").value)
+        quantidade: parseInt(item.querySelector(".quantidade").value, 10),
+        categoria: item.querySelector(".categoria").value || ""
     }));
 
     if (itens.length === 0) {

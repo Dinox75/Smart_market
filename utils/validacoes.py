@@ -1,115 +1,196 @@
 # ==========================================
 # 📦 ARQUIVO: validacoes.py
 # 🎯 RESPONSABILIDADE:
-# Funções utilitárias para validação de entrada do usuário
-# Garante integridade dos dados antes de processar
+# Funções utilitárias para validação de dados
+# Agora separadas em:
+# 1) validações puras (reutilizáveis no terminal, web e saneamento)
+# 2) validações interativas (usam input no terminal)
 # ==========================================
 
 from datetime import datetime
 
+
 # ==========================================
-# ✅ VALIDAÇÃO DE ENTRADA
+# 🧼 FUNÇÕES AUXILIARES
 # ==========================================
 
-# 🔹 Função: validar_produto
-# 📌 Objetivo:
-# Validar nome do produto, garantindo não vazio e formatado
-def validar_produto():
-    while True:
-        produto = input("Item a adicionar: ").strip()
+def limpar_texto(valor):
+    """
+    Remove espaços extras e garante string.
+    """
+    if valor is None:
+        return ""
 
-        if produto == "":
-            print("O nome do produto não pode estar vazio")
+    valor = str(valor).strip()
+    valor = " ".join(valor.split())
+    return valor
+
+
+# ==========================================
+# ✅ VALIDAÇÕES PURAS
+# ==========================================
+
+def validar_produto(valor):
+    """
+    Valida nome do produto.
+    Recebe um valor e devolve o produto formatado.
+    """
+    produto = limpar_texto(valor)
+
+    if produto == "":
+        raise ValueError("O nome do produto não pode estar vazio")
+
+    return produto.title()
+
+
+def validar_quantidade(valor):
+    """
+    Valida quantidade como inteiro positivo.
+    """
+    try:
+        quantidade = int(valor)
+    except (ValueError, TypeError):
+        raise ValueError("A quantidade deve ser um número inteiro válido")
+
+    if quantidade <= 0:
+        raise ValueError("A quantidade deve ser maior que 0")
+
+    return quantidade
+
+
+def validar_preco(valor):
+    """
+    Valida preço como número positivo.
+    Aceita vírgula ou ponto.
+    Retorna arredondado em 2 casas.
+    """
+    if valor is None:
+        raise ValueError("O preço não pode estar vazio")
+
+    preco_str = limpar_texto(valor).replace(",", ".")
+
+    try:
+        preco_unitario = float(preco_str)
+    except (ValueError, TypeError):
+        raise ValueError("Insira um preço válido")
+
+    if preco_unitario <= 0:
+        raise ValueError("O preço deve ser maior que 0")
+
+    return round(preco_unitario, 2)
+
+
+def validar_mercado(valor):
+    """
+    Valida nome do mercado.
+    """
+    mercado = limpar_texto(valor)
+
+    if mercado == "":
+        raise ValueError("O nome do mercado não pode estar vazio")
+
+    return mercado.title()
+
+
+def validar_data(valor, formato_saida="iso"):
+    """
+    Valida data nos formatos:
+    - dd/mm/aaaa
+    - aaaa-mm-dd
+
+    formato_saida:
+    - 'iso'   -> YYYY-MM-DD
+    - 'br'    -> DD/MM/YYYY
+    """
+    data = limpar_texto(valor)
+
+    if data == "":
+        raise ValueError("A data não pode estar vazia")
+
+    data_obj = None
+
+    formatos_aceitos = ["%d/%m/%Y", "%Y-%m-%d"]
+
+    for formato in formatos_aceitos:
+        try:
+            data_obj = datetime.strptime(data, formato)
+            break
+        except ValueError:
             continue
 
-        produto = produto.title()
-        return produto
+    if data_obj is None:
+        raise ValueError("Digite uma data válida nos formatos dd/mm/aaaa ou aaaa-mm-dd")
+
+    if formato_saida == "br":
+        return data_obj.strftime("%d/%m/%Y")
+
+    return data_obj.strftime("%Y-%m-%d")
 
 
-# 🔹 Função: validar_quantidade
-# 📌 Objetivo:
-# Validar quantidade como número inteiro positivo
-def validar_quantidade():
+def validar_hora(valor):
+    """
+    Valida hora no formato HH:MM.
+    """
+    hora = limpar_texto(valor)
+
+    if hora == "":
+        raise ValueError("A hora não pode estar vazia")
+
+    try:
+        hora_obj = datetime.strptime(hora, "%H:%M")
+    except ValueError:
+        raise ValueError("Digite uma hora válida no formato hh:mm")
+
+    return hora_obj.strftime("%H:%M")
+
+
+# ==========================================
+# 💬 VALIDAÇÕES INTERATIVAS (TERMINAL)
+# ==========================================
+
+def validar_produto_input():
     while True:
         try:
-            quantidade = int(input("Quantos produtos foram comprados?: "))
-
-            if quantidade <= 0:
-                print("Favor inserir um valor maior que 0")
-                continue
-
-            return quantidade
-
-        except ValueError:
-            print("Inserir somente números válidos")
+            return validar_produto(input("Item a adicionar: "))
+        except ValueError as erro:
+            print(erro)
 
 
-# 🔹 Função: validar_preco
-# 📌 Objetivo:
-# Validar preço como número positivo, aceitando vírgula ou ponto
-def validar_preco():
+def validar_quantidade_input():
     while True:
         try:
-            preco_str = input("Informe o preço do produto (unidade): ").strip()
-            preco_str = preco_str.replace(",", ".")
-            preco_unitario = float(preco_str)
-
-            if preco_unitario <= 0:
-                print("Favor inserir um preço maior que 0")
-                continue
-
-            return preco_unitario
-
-        except ValueError:
-            print("Inserir um preço válido")
+            return validar_quantidade(input("Quantos produtos foram comprados?: "))
+        except ValueError as erro:
+            print(erro)
 
 
-# 🔹 Função: validar_mercado
-# 📌 Objetivo:
-# Validar nome do mercado, garantindo não vazio e formatado
-def validar_mercado():
+def validar_preco_input():
     while True:
-            mercado = input("Digite o mercado: ").strip()
-
-            if mercado == "":
-                print("Por favor insira um nome valido")
-                continue
-
-            return mercado.title()
-
-
-# 🔹 Função: validar_data
-# 📌 Objetivo:
-# Validar data no formato dd/mm/aaaa e evitar entradas inválidas
-def validar_data():
-    while True:
-        data = input("Data da compra (dd/mm/aaaa):").strip()
-
-        if data == "":
-            print("A data não pode estar vazia")
-            continue
-
         try:
-            datetime.strptime(data, "%d/%m/%Y")
-            return data
-        except ValueError:
-            print("Digite uma data valida no formato dd/mm/aaaa")
+            return validar_preco(input("Informe o preço do produto (unidade): "))
+        except ValueError as erro:
+            print(erro)
 
 
-# 🔹 Função: validar_hora
-# 📌 Objetivo:
-# Validar hora no formato hh:mm e garantir dados consistentes
-def validar_hora():
+def validar_mercado_input():
     while True:
-        hora = input("Insira a hora da compra: ").strip()
-
-        if hora == "":
-            print("A hora não pode estar vazia")
-            continue
-
         try:
-            datetime.strptime(hora, "%H:%M")
-            return hora
-        except ValueError:
-            print("Digite uma hora valida no formato hh:mm")
+            return validar_mercado(input("Digite o mercado: "))
+        except ValueError as erro:
+            print(erro)
 
+
+def validar_data_input(formato_saida="iso"):
+    while True:
+        try:
+            return validar_data(input("Data da compra (dd/mm/aaaa ou aaaa-mm-dd): "), formato_saida=formato_saida)
+        except ValueError as erro:
+            print(erro)
+
+
+def validar_hora_input():
+    while True:
+        try:
+            return validar_hora(input("Insira a hora da compra: "))
+        except ValueError as erro:
+            print(erro)

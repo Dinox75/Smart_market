@@ -1,14 +1,9 @@
-# ==========================================
-# 📦 ARQUIVO: app.py
-# 🎯 RESPONSABILIDADE:
-# Servidor web Flask para integrar frontend com backend
-# Fornece API REST e serve interface web
-# ==========================================
-
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
+
 from models.compra import Compra
 from models.item import Item
+
 from utils.validacoes import (
     validar_mercado,
     validar_data,
@@ -17,61 +12,68 @@ from utils.validacoes import (
     validar_quantidade,
     validar_preco
 )
+
+from services.categorizar import obter_categoria_produto, CATEGORIAS_VALIDAS, padronizar_nome_produto
 from services.historico import carregar_compras, salvar_compra
 from services.comparacoes import comparar_compras
-from services.categorizar import obter_categoria_produto
-import json
-from datetime import datetime
+from services.categorizar import obter_categoria_produto, CATEGORIAS_VALIDAS
 
-app = Flask(__name__, template_folder='.')
+app = Flask(__name__, template_folder='interface')
 CORS(app)
 
+
 # ==========================================
-# 🌐 ROTAS WEB
+# 🌐 FRONTEND
 # ==========================================
 
 @app.route('/')
 def index():
-    """Serve a página principal"""
     return render_template('index.html')
 
+
 # ==========================================
-# 🔌 API ENDPOINTS
+# 📦 COMPRAS
 # ==========================================
 
 @app.route('/api/compras', methods=['GET'])
 def get_compras():
-    """Retorna todas as compras"""
     try:
         compras = carregar_compras()
         return jsonify({'success': True, 'compras': compras})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
+
 @app.route('/api/compras', methods=['POST'])
 def create_compra():
-    """Cria uma nova compra"""
     try:
         data = request.get_json()
 
-        # Validar dados básicos
+        # 🔹 VALIDAÇÃO PRINCIPAL
         mercado = validar_mercado(data.get('mercado'))
-        data_compra = validar_data(data.get('data'))
+        data_compra = validar_data(data.get('data'))  # aceita ISO agora
         hora = validar_hora(data.get('hora'))
 
         compra = Compra(mercado, data_compra, hora)
 
-        # Processar itens
-        for item_data in data.get('itens', []):
+        # 🔹 ITENS
+        itens = data.get('itens', [])
+
+        if not itens:
+            return jsonify({'success': False, 'error': 'A compra precisa ter itens'}), 400
+
+        for item_data in itens:
             produto = validar_produto(item_data.get('produto'))
-            categoria = obter_categoria_produto(produto)
+            produto = padronizar_nome_produto(produto)
+
             quantidade = validar_quantidade(item_data.get('quantidade'))
             preco = validar_preco(item_data.get('preco_unitario'))
+
+            categoria = obter_categoria_produto(produto)
 
             item = Item(produto, preco, quantidade, categoria)
             compra.adicionar_item(item)
 
-        # Salvar compra
         salvar_compra(compra)
 
         return jsonify({
@@ -82,45 +84,59 @@ def create_compra():
 
     except ValueError as e:
         return jsonify({'success': False, 'error': str(e)}), 400
+
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
+
 
 @app.route('/api/compras/<int:compra_id>', methods=['GET'])
 def get_compra(compra_id):
-    """Retorna uma compra específica"""
     try:
         compras = carregar_compras()
+
         if 0 <= compra_id < len(compras):
             return jsonify({'success': True, 'compra': compras[compra_id]})
+
         return jsonify({'success': False, 'error': 'Compra não encontrada'}), 404
+
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
+
+# ==========================================
+# 🔍 COMPARAÇÃO
+# ==========================================
+
 @app.route('/api/comparar', methods=['POST'])
 def comparar():
-    """Compara duas compras"""
     try:
         data = request.get_json()
-        compra1_id = data.get('compra1_id')
-        compra2_id = data.get('compra2_id')
+
+        id1 = data.get('compra1_id')
+        id2 = data.get('compra2_id')
 
         compras = carregar_compras()
-        if not (0 <= compra1_id < len(compras) and 0 <= compra2_id < len(compras)):
-            return jsonify({'success': False, 'error': 'IDs de compra inválidos'}), 400
 
-        compra1 = compras[compra1_id]
-        compra2 = compras[compra2_id]
+        if not isinstance(id1, int) or not isinstance(id2, int):
+            return jsonify({'success': False, 'error': 'IDs inválidos'}), 400
 
-        resultado = comparar_compras(compra2, compra1)
+        if not (0 <= id1 < len(compras) and 0 <= id2 < len(compras)):
+            return jsonify({'success': False, 'error': 'IDs fora do range'}), 400
+
+        resultado = comparar_compras(compras[id2], compras[id1])
 
         return jsonify({'success': True, 'comparacao': resultado})
 
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
+
+# ==========================================
+# 📊 DASHBOARD
+# ==========================================
+
 @app.route('/api/dashboard', methods=['GET'])
 def get_dashboard():
-    """Retorna dados para o dashboard"""
     try:
         compras = carregar_compras()
 
@@ -137,22 +153,23 @@ def get_dashboard():
                 }
             })
 
-        # Cálculos básicos
         total_compras = len(compras)
-        total_gasto = sum(c['total_compra'] for c in compras)
-        media_ticket = total_gasto / total_compras if total_compras > 0 else 0
+        total_gasto = round(sum(c['total_compra'] for c in compras), 2)
+        media_ticket = round(total_gasto / total_compras, 2)
 
-        # Gasto por categoria
         gasto_categoria = {}
+
         for compra in compras:
             for item in compra['itens']:
-                cat = item.get('categoria', 'Outros')
+                cat = item.get('categoria') or 'Outros'
                 gasto_categoria[cat] = gasto_categoria.get(cat, 0) + item['total_item']
+
+        # arredondar valores
+        gasto_categoria = {k: round(v, 2) for k, v in gasto_categoria.items()}
 
         top_categoria = max(gasto_categoria.items(), key=lambda x: x[1])[0] if gasto_categoria else None
 
-        # Histórico de valores
-        historico_valores = [c['total_compra'] for c in compras[-10:]]  # Últimas 10
+        historico_valores = [round(c['total_compra'], 2) for c in compras[-10:]]
 
         return jsonify({
             'success': True,
@@ -169,11 +186,19 @@ def get_dashboard():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
+
+# ==========================================
+# 📂 CATEGORIAS
+# ==========================================
+
 @app.route('/api/categorias', methods=['GET'])
 def get_categorias():
-    """Retorna lista de categorias válidas"""
-    from services.categorizar import CATEGORIAS_VALIDAS
     return jsonify({'success': True, 'categorias': CATEGORIAS_VALIDAS})
+
+
+# ==========================================
+# 🚀 RUN
+# ==========================================
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)

@@ -111,8 +111,8 @@ def comparar_compras_escolhidas():
         print("Entrada inválida.")
         return
 
-    if c1 == c2:
-        print("Escolha duas diferentes.")
+    if c1 < 1 or c2 < 1 or c1 > len(historico) or c2 > len(historico):
+        print("Escolha inválida.")
         return
 
     compra1 = historico[c1 - 1]

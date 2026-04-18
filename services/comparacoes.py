@@ -16,7 +16,6 @@ def comparar_compras(compra_atual, compra_anterior):
     novos_produtos = []
     removidos = []
 
-    # 🔹 normalizar nomes
     produtos_anterior = {
         normalizar_nome(item.get("produto")): item
         for item in compra_anterior.get("itens", [])
@@ -27,7 +26,6 @@ def comparar_compras(compra_atual, compra_anterior):
         for item in compra_atual.get("itens", [])
     }
 
-    # 🔍 comparar atual com anterior
     for nome_norm, item_atual in produtos_atual.items():
         produto_original = item_atual.get("produto")
 
@@ -50,11 +48,9 @@ def comparar_compras(compra_atual, compra_anterior):
             if diferenca_preco > 0:
                 base["diferenca_preco"] = diferenca_preco
                 aumentaram.append(base)
-
             elif diferenca_preco < 0:
                 base["diferenca_preco"] = diferenca_preco
                 diminuiram.append(base)
-
             else:
                 mantiveram.append(base)
 
@@ -65,7 +61,6 @@ def comparar_compras(compra_atual, compra_anterior):
                 "quantidade_atual": item_atual.get("quantidade", 0)
             })
 
-    # 🔍 removidos
     for nome_norm, item_anterior in produtos_anterior.items():
         if nome_norm not in produtos_atual:
             removidos.append({
@@ -81,3 +76,62 @@ def comparar_compras(compra_atual, compra_anterior):
         "novos_produtos": novos_produtos,
         "removidos": removidos
     }
+
+
+def exibir_relatorio_comparacao(resultado):
+    print("\n--- Relatório de Comparação ---")
+
+    if resultado["aumentaram"]:
+        print("\nProdutos que aumentaram de preço:")
+        for item in resultado["aumentaram"]:
+            print(
+                f"{item['produto']}: "
+                f"R$ {item['preco_anterior']:.2f} -> R$ {item['preco_atual']:.2f} "
+                f"(Diferença: R$ {item['diferenca_preco']:+.2f}) | "
+                f"Qtd: {item['quantidade_anterior']} -> {item['quantidade_atual']}"
+            )
+
+    if resultado["diminuiram"]:
+        print("\nProdutos que diminuíram de preço:")
+        for item in resultado["diminuiram"]:
+            print(
+                f"{item['produto']}: "
+                f"R$ {item['preco_anterior']:.2f} -> R$ {item['preco_atual']:.2f} "
+                f"(Diferença: R$ {item['diferenca_preco']:+.2f}) | "
+                f"Qtd: {item['quantidade_anterior']} -> {item['quantidade_atual']}"
+            )
+
+    if resultado["mantiveram"]:
+        print("\nProdutos que mantiveram o preço:")
+        for item in resultado["mantiveram"]:
+            print(
+                f"{item['produto']}: "
+                f"R$ {item['preco_atual']:.2f} | "
+                f"Qtd: {item['quantidade_anterior']} -> {item['quantidade_atual']}"
+            )
+
+    if resultado["novos_produtos"]:
+        print("\nNovos produtos na compra atual:")
+        for item in resultado["novos_produtos"]:
+            print(
+                f"{item['produto']}: "
+                f"R$ {item['preco_atual']:.2f} | "
+                f"Qtd: {item['quantidade_atual']}"
+            )
+
+    if resultado["removidos"]:
+        print("\nProdutos removidos da compra anterior:")
+        for item in resultado["removidos"]:
+            print(
+                f"{item['produto']}: "
+                f"R$ {item['preco_anterior']:.2f} | "
+                f"Qtd: {item['quantidade_anterior']}"
+            )
+
+    if (
+        not resultado["aumentaram"]
+        and not resultado["diminuiram"]
+        and not resultado["novos_produtos"]
+        and not resultado["removidos"]
+    ):
+        print("Nenhuma mudança significativa entre as compras.")

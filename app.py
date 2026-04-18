@@ -16,7 +16,6 @@ from utils.validacoes import (
 from services.categorizar import obter_categoria_produto, CATEGORIAS_VALIDAS, padronizar_nome_produto
 from services.historico import carregar_compras, salvar_compra
 from services.comparacoes import comparar_compras
-from services.categorizar import obter_categoria_produto, CATEGORIAS_VALIDAS
 
 app = Flask(__name__, template_folder='interface')
 CORS(app)

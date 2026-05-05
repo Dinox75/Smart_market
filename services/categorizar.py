@@ -6,12 +6,13 @@ import json
 import os
 import unicodedata
 import re
+from pathlib import Path
 
 # ==========================================
 # 📊 CONSTANTES
 # ==========================================
 
-CAMINHO_CATEGORIAS = 'data/categorias_produtos.json'
+CAMINHO_CATEGORIAS = Path(__file__).resolve().parent.parent / "data" / "categorias_produtos.json"
 
 CATEGORIAS_VALIDAS = [
     "Mercearia",

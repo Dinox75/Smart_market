@@ -4,14 +4,14 @@
 
 import json
 import os
-import unicodedata
-import re
+from utils.validacoes import normalizar_texto
+from pathlib import Path
 
 # ==========================================
 # 📊 CONSTANTES
 # ==========================================
 
-CAMINHO_CATEGORIAS = 'data/categorias_produtos.json'
+CAMINHO_CATEGORIAS = Path(__file__).resolve().parent.parent / "data" / "categorias_produtos.json"
 
 CATEGORIAS_VALIDAS = [
     "Mercearia",
@@ -67,14 +67,7 @@ PALAVRAS_CHAVE = {
 # 🔧 NORMALIZAÇÃO BASE (TEM QUE VIR PRIMEIRO)
 # ==========================================
 
-def normalizar_texto(texto):
-    if not isinstance(texto, str):
-        return ""
-
-    texto = unicodedata.normalize('NFD', texto).encode('ascii', 'ignore').decode('utf-8')
-    texto = texto.lower()
-    texto = re.sub(r'\s+', ' ', texto).strip()
-    return texto
+# Função normalizar_texto agora está centralizada em utils/validacoes.py
 
 # ==========================================
 # 🔧 CORREÇÃO DE NOMES
@@ -90,29 +83,34 @@ CORRECOES_CONHECIDAS = {
 }
 
 def corrigir_nome_produto(nome):
+    """
+    Corrige nomes de produtos conhecidos para padronização.
+    """
     nome_norm = normalizar_texto(nome)
-
     for errado, correto in CORRECOES_CONHECIDAS.items():
         if errado in nome_norm:
             nome_norm = nome_norm.replace(errado, correto)
-
     return nome_norm
 
 
 def formatar_nome_final(nome):
+    """
+    Formata o nome final do produto para exibição.
+    """
     palavras = nome.split()
-
     palavras_formatadas = []
     for p in palavras:
         if p.endswith("lt"):
             palavras_formatadas.append(p.upper())
         else:
             palavras_formatadas.append(p.capitalize())
-
     return " ".join(palavras_formatadas)
 
 
 def padronizar_nome_produto(nome):
+    """
+    Aplica correção e formatação ao nome do produto.
+    """
     nome_corrigido = corrigir_nome_produto(nome)
     nome_final = formatar_nome_final(nome_corrigido)
     return nome_final

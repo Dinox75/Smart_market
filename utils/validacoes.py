@@ -7,7 +7,26 @@
 # 2) validações interativas (usam input no terminal)
 # ==========================================
 
+
 from datetime import datetime
+import unicodedata
+import re
+# ==========================================
+# 🔧 NORMALIZAÇÃO DE TEXTO (REUTILIZÁVEL)
+# ==========================================
+
+def normalizar_texto(texto):
+    """
+    Normaliza texto removendo acentos, caixa e espaços extras.
+    Útil para padronizar nomes de produtos, mercados, etc.
+    Pode ser importada por outros módulos.
+    """
+    if not isinstance(texto, str):
+        return ""
+    texto = unicodedata.normalize('NFD', texto).encode('ascii', 'ignore').decode('utf-8')
+    texto = texto.lower()
+    texto = re.sub(r'\s+', ' ', texto).strip()
+    return texto
 
 
 # ==========================================

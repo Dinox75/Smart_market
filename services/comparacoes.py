@@ -2,14 +2,19 @@
 # 📦 ARQUIVO: comparacoes.py
 # ==========================================
 
+from utils.validacoes import normalizar_texto
+
 def normalizar_nome(produto):
     """
-    Padroniza o nome do produto para comparação.
+    Padroniza o nome do produto para comparação, usando normalização centralizada.
     """
-    return str(produto).strip().lower()
+    return normalizar_texto(produto)
 
 
 def comparar_compras(compra_atual, compra_anterior):
+    """
+    Compara duas compras e retorna diferenças de preço, novos produtos e removidos.
+    """
     aumentaram = []
     diminuiram = []
     mantiveram = []
@@ -20,7 +25,6 @@ def comparar_compras(compra_atual, compra_anterior):
         normalizar_nome(item.get("produto")): item
         for item in compra_anterior.get("itens", [])
     }
-
     produtos_atual = {
         normalizar_nome(item.get("produto")): item
         for item in compra_atual.get("itens", [])
@@ -28,15 +32,11 @@ def comparar_compras(compra_atual, compra_anterior):
 
     for nome_norm, item_atual in produtos_atual.items():
         produto_original = item_atual.get("produto")
-
         if nome_norm in produtos_anterior:
             item_anterior = produtos_anterior[nome_norm]
-
             preco_atual = round(item_atual.get("preco_unitario", 0), 2)
             preco_anterior = round(item_anterior.get("preco_unitario", 0), 2)
-
             diferenca_preco = round(preco_atual - preco_anterior, 2)
-
             base = {
                 "produto": produto_original,
                 "preco_anterior": preco_anterior,
@@ -44,7 +44,6 @@ def comparar_compras(compra_atual, compra_anterior):
                 "quantidade_anterior": item_anterior.get("quantidade", 0),
                 "quantidade_atual": item_atual.get("quantidade", 0)
             }
-
             if diferenca_preco > 0:
                 base["diferenca_preco"] = diferenca_preco
                 aumentaram.append(base)
@@ -53,7 +52,6 @@ def comparar_compras(compra_atual, compra_anterior):
                 diminuiram.append(base)
             else:
                 mantiveram.append(base)
-
         else:
             novos_produtos.append({
                 "produto": produto_original,
@@ -79,8 +77,10 @@ def comparar_compras(compra_atual, compra_anterior):
 
 
 def exibir_relatorio_comparacao(resultado):
+    """
+    Exibe relatório detalhado da comparação de compras no terminal.
+    """
     print("\n--- Relatório de Comparação ---")
-
     if resultado["aumentaram"]:
         print("\nProdutos que aumentaram de preço:")
         for item in resultado["aumentaram"]:
@@ -90,7 +90,6 @@ def exibir_relatorio_comparacao(resultado):
                 f"(Diferença: R$ {item['diferenca_preco']:+.2f}) | "
                 f"Qtd: {item['quantidade_anterior']} -> {item['quantidade_atual']}"
             )
-
     if resultado["diminuiram"]:
         print("\nProdutos que diminuíram de preço:")
         for item in resultado["diminuiram"]:

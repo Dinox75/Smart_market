@@ -1,9 +1,9 @@
 [
     {
         "mercado": "Carrefour",
-        "data": "09/04/2026",
+        "data": "2026-04-09",
         "hora": "13:41",
-        "total_compra": 106.35000000000001,
+        "total_compra": 106.35,
         "total_itens": 14,
         "itens": [
             {
@@ -25,7 +25,7 @@
                 "preco_unitario": 5.99,
                 "quantidade": 5,
                 "categoria": "Frios e Laticinios",
-                "total_item": 29.950000000000003
+                "total_item": 29.95
             },
             {
                 "produto": "Caixa De Bombom Lacta",
@@ -52,7 +52,7 @@
     },
     {
         "mercado": "Carrefour",
-        "data": "09/04/2026",
+        "data": "2026-04-09",
         "hora": "13:30",
         "total_compra": 35.96,
         "total_itens": 4,
@@ -63,6 +63,22 @@
                 "quantidade": 4,
                 "categoria": "Bebidas",
                 "total_item": 35.96
+            }
+        ]
+    },
+    {
+        "mercado": "Mercadin Sul",
+        "data": "2026-04-22",
+        "hora": "11:56",
+        "total_compra": 9.98,
+        "total_itens": 2,
+        "itens": [
+            {
+                "produto": "Leite Condensado Azulao",
+                "preco_unitario": 4.99,
+                "quantidade": 2,
+                "categoria": "Frios e Laticinios",
+                "total_item": 9.98
             }
         ]
     }

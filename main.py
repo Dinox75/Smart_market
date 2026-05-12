@@ -1,3 +1,4 @@
+from utils.cores import SUCESSO, ERRO, ALERTA, INFO, DESTAQUE
 from models.compra import Compra
 from models.item import Item
 from utils.validacoes import (
@@ -15,7 +16,7 @@ from services.categorizar import obter_categoria_produto, padronizar_nome_produt
 
 def criar_compra():
     mercado = validar_mercado_input()
-    data_agora = validar_data_input()  # agora já salva em ISO
+    data_agora = validar_data_input()
     hora_agora = validar_hora_input()
 
     compra = Compra(mercado, data_agora, hora_agora)
@@ -31,27 +32,29 @@ def criar_compra():
         item = Item(produto, preco_unitario, quantidade, categoria)
         compra.adicionar_item(item)
 
+        print(SUCESSO + "Item adicionado com sucesso.")
+
         continuar = input("Continuar? (s/n): ").strip().lower()
 
         if continuar == "n":
             break
         elif continuar != "s":
-            print("Opção inválida. Continuando...")
+            print(ALERTA + "Opção inválida. Continuando...")
 
     return compra
 
 
 def mostrar_resumo(compra):
-    print("\n--- Resumo da compra ---")
+    print(DESTAQUE + "\n--- Resumo da compra ---")
     print(f"Mercado: {compra.mercado}")
     print(f"Data: {compra.data}")
     print(f"Hora: {compra.hora}")
     print(f"Total de itens: {compra.total_itens}")
-    print(f"Total da compra: R$ {compra.total_compra:.2f}")
+    print(SUCESSO + f"Total da compra: R$ {compra.total_compra:.2f}")
 
 
 def mostrar_menu():
-    print("\n--- SMART MARKET ---")
+    print(INFO + "\n--- SMART MARKET ---")
     print("1 - Registrar nova compra")
     print("2 - Ver histórico")
     print("3 - Comparar compras")
@@ -65,22 +68,23 @@ def mostrar_historico():
     historico = carregar_compras()
 
     if not historico:
-        print("Nenhuma compra registrada.")
+        print(ALERTA + "Nenhuma compra registrada.")
         return
 
-    print("\n--- Histórico de Compras ---")
+    print(DESTAQUE + "\n--- Histórico de Compras ---")
 
     for i, compra in enumerate(historico, start=1):
-        print(f"\nCompra {i}")
+        print(INFO + f"\nCompra {i}")
         print(f"Mercado: {compra['mercado']}")
         print(f"Data: {compra['data']}")
         print(f"Hora: {compra['hora']}")
         print(f"Total de itens: {compra['total_itens']}")
-        print(f"Total: R$ {compra['total_compra']:.2f}")
+        print(SUCESSO + f"Total: R$ {compra['total_compra']:.2f}")
 
         ver_itens = input("Ver itens? (s/n): ").strip().lower()
 
         if ver_itens == "s":
+            print(DESTAQUE + "Itens da compra:")
             for item in compra["itens"]:
                 categoria = item.get("categoria", "Sem categoria")
 
@@ -96,10 +100,10 @@ def comparar_compras_escolhidas():
     historico = carregar_compras()
 
     if len(historico) < 2:
-        print("Necessário pelo menos 2 compras.")
+        print(ALERTA + "Necessário pelo menos 2 compras.")
         return
 
-    print("\n--- Compras disponíveis ---")
+    print(DESTAQUE + "\n--- Compras disponíveis ---")
 
     for i, compra in enumerate(historico, start=1):
         print(f"{i} - {compra['mercado']} - {compra['data']} às {compra['hora']}")
@@ -108,11 +112,15 @@ def comparar_compras_escolhidas():
         c1 = int(input("Primeira compra: "))
         c2 = int(input("Segunda compra: "))
     except ValueError:
-        print("Entrada inválida.")
+        print(ERRO + "Entrada inválida.")
         return
 
     if c1 < 1 or c2 < 1 or c1 > len(historico) or c2 > len(historico):
-        print("Escolha inválida.")
+        print(ERRO + "Escolha inválida.")
+        return
+
+    if c1 == c2:
+        print(ALERTA + "Escolha duas compras diferentes.")
         return
 
     compra1 = historico[c1 - 1]
@@ -126,7 +134,7 @@ def analisar_consumo_por_categoria():
     historico = carregar_compras()
 
     if not historico:
-        print("Nenhum dado.")
+        print(ALERTA + "Nenhum dado.")
         return
 
     consumo = {}
@@ -140,12 +148,12 @@ def analisar_consumo_por_categoria():
 
             consumo[categoria] += item["total_item"]
 
-    print("\n--- Top 3 categorias ---")
+    print(DESTAQUE + "\n--- Top 3 categorias ---")
 
     top = sorted(consumo.items(), key=lambda x: x[1], reverse=True)[:3]
 
     for i, (cat, valor) in enumerate(top, start=1):
-        print(f"{i}º {cat} - R$ {valor:.2f}")
+        print(SUCESSO + f"{i}º {cat} - R$ {valor:.2f}")
 
 
 def main():
@@ -165,7 +173,7 @@ def main():
                 exibir_relatorio_comparacao(resultado)
 
             salvar_compra(compra)
-            print("Compra salva.")
+            print(SUCESSO + "Compra salva com sucesso.")
 
         elif opcao == "2":
             mostrar_historico()
@@ -177,11 +185,11 @@ def main():
             analisar_consumo_por_categoria()
 
         elif opcao == "5":
-            print("Saindo...")
+            print(INFO + "Saindo...")
             break
 
         else:
-            print("Opção inválida.")
+            print(ERRO + "Opção inválida.")
 
 
 if __name__ == "__main__":
